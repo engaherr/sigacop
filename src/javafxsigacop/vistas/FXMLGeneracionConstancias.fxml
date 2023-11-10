@@ -29,101 +29,91 @@
                               <Font name="Microsoft JhengHei UI Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label layoutX="71.0" layoutY="73.0" text="Programa educativo">
+                        <Label layoutX="71.0" layoutY="102.0" text="Programa educativo">
                            <font>
                               <Font name="Microsoft JhengHei UI Bold" size="12.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="cbProgramaEducativo" layoutX="71.0" layoutY="91.0" prefHeight="25.0" prefWidth="271.0" />
-                        <Label fx:id="lbErrorProgramaEducativo" layoutX="71.0" layoutY="116.0" text="Debe seleccionar un programa educativo" textFill="#c60d0d">
+                        <ComboBox fx:id="cbProgramaEducativo" layoutX="71.0" layoutY="120.0" prefHeight="25.0" prefWidth="271.0" />
+                        <Label fx:id="lbErrorProgramaEducativo" layoutX="71.0" layoutY="145.0" text="Debe seleccionar un programa educativo" textFill="#c60d0d" visible="false">
                            <font>
                               <Font name="Microsoft JhengHei UI" size="11.0" />
                            </font>
                         </Label>
-                        <Label layoutX="71.0" layoutY="133.0" text="Bloque">
+                        <Label layoutX="367.0" layoutY="162.0" text="Bloque">
                            <font>
                               <Font name="Microsoft JhengHei UI Bold" size="12.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="cbBloque" layoutX="71.0" layoutY="150.0" prefHeight="25.0" prefWidth="269.0" />
-                        <Label fx:id="lbErrorBloque" layoutX="71.0" layoutY="175.0" text="Debe seleccionar un bloque" textFill="#c60d0d">
+                        <Label layoutX="514.0" layoutY="163.0" text="Sección">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lbErrorSeccion1" layoutX="367.0" layoutY="144.0" text="Debe seleccionar una experiencia educativa" textFill="#c60d0d" visible="false">
                            <font>
                               <Font name="Microsoft JhengHei UI" size="11.0" />
                            </font>
                         </Label>
-                        <Label layoutX="71.0" layoutY="192.0" text="Sección">
+                        <ComboBox fx:id="cbExperienciaEducativa" disable="true" layoutX="367.0" layoutY="119.0" prefHeight="25.0" prefWidth="269.0" />
+                        <Label layoutX="367.0" layoutY="102.0" text="Experiencia educativa">
                            <font>
                               <Font name="Microsoft JhengHei UI Bold" size="12.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="cbSeccion" layoutX="71.0" layoutY="209.0" prefHeight="25.0" prefWidth="269.0" />
-                        <Label fx:id="lbErrorSeccion" layoutX="71.0" layoutY="234.0" text="Debe seleccionar una sección" textFill="#c60d0d">
+                        <Label layoutX="72.0" layoutY="163.0" text="Periodo escolar">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="cbPeriodoEscolar" layoutX="72.0" layoutY="180.0" prefHeight="25.0" prefWidth="269.0" />
+                        <Label fx:id="lbErrorSeccion11" layoutX="72.0" layoutY="205.0" text="Debe seleccionar un periodo escolar" textFill="#c60d0d" visible="false">
                            <font>
                               <Font name="Microsoft JhengHei UI" size="11.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lbErrorSeccion1" layoutX="367.0" layoutY="115.0" text="Debe seleccionar una experiencia educativa" textFill="#c60d0d">
-                           <font>
-                              <Font name="Microsoft JhengHei UI" size="11.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="cbSeccion1" layoutX="367.0" layoutY="90.0" prefHeight="25.0" prefWidth="269.0" />
-                        <Label layoutX="367.0" layoutY="73.0" text="Experiencia educativa">
+                        <Label layoutX="71.0" layoutY="63.0" text="Fecha de expedición: ">
                            <font>
                               <Font name="Microsoft JhengHei UI Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label layoutX="367.0" layoutY="133.0" text="Periodo escolar">
+                        <Label fx:id="lbFechaExpedicion" layoutX="201.0" layoutY="64.0">
                            <font>
                               <Font name="Microsoft JhengHei UI Bold" size="12.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="cbSeccion11" layoutX="367.0" layoutY="150.0" prefHeight="25.0" prefWidth="269.0" />
-                        <Label fx:id="lbErrorSeccion11" layoutX="367.0" layoutY="175.0" text="Debe seleccionar un periodo escolar" textFill="#c60d0d">
-                           <font>
-                              <Font name="Microsoft JhengHei UI" size="11.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="367.0" layoutY="214.0" text="Fecha de expedición: ">
-                           <font>
-                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="lbFechaExpedicion" layoutX="497.0" layoutY="215.0">
-                           <font>
-                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Button defaultButton="true" layoutX="393.0" layoutY="310.0" mnemonicParsing="false" style="-fx-background-color: #28AD56; -fx-padding: 8 16 8 16; -fx-cursor: hand;" text="Generar constancia" textFill="WHITE">
+                        <Button defaultButton="true" layoutX="393.0" layoutY="310.0" mnemonicParsing="false" onAction="#generarConstanciaClic" style="-fx-background-color: #28AD56; -fx-padding: 8 16 8 16; -fx-cursor: hand;" text="Generar constancia" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Button cancelButton="true" layoutX="558.0" layoutY="310.0" mnemonicParsing="false" style="-fx-background-color: #c60d0d; -fx-padding: 8 16 8 16; -fx-cursor: hand;" text="Cancelar" textFill="WHITE">
+                        <Button cancelButton="true" layoutX="558.0" layoutY="310.0" mnemonicParsing="false" onAction="#cancelarGeneracionClic" style="-fx-background-color: #c60d0d; -fx-padding: 8 16 8 16; -fx-cursor: hand;" text="Cancelar" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Label layoutX="71.0" layoutY="265.0" text="Docente:">
+                        <Label layoutX="72.0" layoutY="238.0" text="Docente:">
                            <font>
                               <Font name="Microsoft JhengHei UI Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label layoutX="367.0" layoutY="258.0" text="Director:">
+                        <Label layoutX="72.0" layoutY="265.0" text="Director:">
                            <font>
                               <Font name="Microsoft JhengHei UI Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lbDocente" layoutX="130.0" layoutY="265.0">
+                        <Label fx:id="lbDocente" layoutX="131.0" layoutY="238.0">
                            <font>
                               <Font name="Microsoft JhengHei UI Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lbDirector" layoutX="424.0" layoutY="258.0">
+                        <Label fx:id="lbDirector" layoutX="129.0" layoutY="265.0">
                            <font>
                               <Font name="Microsoft JhengHei UI Bold" size="12.0" />
                            </font>
                         </Label>
+                        <TextField fx:id="tfBloque" disable="true" layoutX="366.0" layoutY="180.0" prefHeight="25.0" prefWidth="121.0" />
+                        <TextField fx:id="tfSeccion" disable="true" layoutX="513.0" layoutY="180.0" prefHeight="25.0" prefWidth="123.0" />
                      </children>
                   </AnchorPane>
                </content>
