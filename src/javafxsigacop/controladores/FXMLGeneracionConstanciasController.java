@@ -52,6 +52,7 @@ public class FXMLGeneracionConstanciasController implements Initializable {
         cargarPeriodosEscolares();
         
         manejarCambioProgramaYPeriodo();
+        manejarCambioExperienciaEducativa();
     }
     
     private void mostrarFechaActual() {
@@ -79,6 +80,8 @@ public class FXMLGeneracionConstanciasController implements Initializable {
                 if (cbProgramaEducativo.getValue() != null && cbPeriodoEscolar.getValue() != null) {
                     cargarExperienciasEducativas();
                     cbExperienciaEducativa.setDisable(false);
+                    tfBloque.setText("");
+                    tfSeccion.setText("");
                 }
             }
         };
@@ -95,6 +98,18 @@ public class FXMLGeneracionConstanciasController implements Initializable {
         experienciasEducativas.addAll(RecursosEstaticos.obtenerExperienciasEducativas(idPrograma, idPeriodo));
         
         cbExperienciaEducativa.setItems(experienciasEducativas);
+    }
+    
+    private void manejarCambioExperienciaEducativa() {
+        cbExperienciaEducativa.valueProperty().addListener(new ChangeListener<ExperienciaEducativa>() {
+            @Override
+            public void changed(ObservableValue<? extends ExperienciaEducativa> observable, ExperienciaEducativa oldValue, ExperienciaEducativa newValue) {
+                if (newValue != null) {
+                    tfBloque.setText(newValue.getBloque());
+                    tfSeccion.setText(newValue.getSeccion());
+                }
+            }
+        });
     }
 
     @FXML
