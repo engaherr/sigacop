@@ -7,15 +7,25 @@ public class Cuenta {
     private int numeroPersonal;
     private int codigoRespuesta;
 
+    private static Cuenta instanciaSingleton = null;
+
     public Cuenta() {
     }
 
-    public Cuenta(int idCuenta, String contrasenha, boolean esAdministrativo, int numeroPersonal,int codigoRespuesta) {
+    public Cuenta(int idCuenta, String contrasenha, boolean esAdministrativo, int numeroPersonal, int codigoRespuesta) {
         this.idCuenta = idCuenta;
         this.contrasenha = contrasenha;
         this.esAdministrativo = esAdministrativo;
         this.numeroPersonal = numeroPersonal;
         this.codigoRespuesta = codigoRespuesta;
+    }
+    
+    public static Cuenta getInstanciaSingleton() {
+        return instanciaSingleton;
+    }   
+    
+    public static void setInstanciaSingleton(Cuenta instanciaSingleton){
+        Cuenta.instanciaSingleton = instanciaSingleton;
     }
 
     public int getIdCuenta() {

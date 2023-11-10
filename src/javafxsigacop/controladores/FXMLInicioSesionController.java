@@ -87,11 +87,13 @@ public class FXMLInicioSesionController implements Initializable {
                         Utilidades.mostrarDialogoSimple("Administrativo verificado",
                                 "Bienvenid@ " + " al sistema...", 
                                 Alert.AlertType.INFORMATION);
+                        Cuenta.setInstanciaSingleton(cuentaRespuesta);
                         irPantallaPrincipal();
                     }else if(cuentaRespuesta != null && cuentaRespuesta.getIdCuenta()> 0 && !cuentaRespuesta.isEsAdministrativo()){
                         Utilidades.mostrarDialogoSimple("Profesor verificado",
                                 "Bienvenid@ " + " al sistema...", 
                                 Alert.AlertType.INFORMATION);
+                        Cuenta.setInstanciaSingleton(cuentaRespuesta);
                         irPantallaPrincipal();
                     }else{
                         Utilidades.mostrarDialogoSimple("Credenciales incorrectas", 
