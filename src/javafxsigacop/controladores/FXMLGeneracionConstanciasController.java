@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -30,10 +31,6 @@ public class FXMLGeneracionConstanciasController implements Initializable {
     @FXML
     private Label lbErrorProgramaEducativo;
     @FXML
-    private Label lbErrorSeccion1;
-    @FXML
-    private Label lbErrorSeccion11;
-    @FXML
     private Label lbFechaExpedicion;
     @FXML
     private Label lbDocente;
@@ -43,10 +40,15 @@ public class FXMLGeneracionConstanciasController implements Initializable {
     private TextField tfBloque;
     @FXML
     private TextField tfSeccion;
+    @FXML
+    private Label lbErrorExperienciaEducativa;
+    @FXML
+    private Label lbErrorPeriodoEscolar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         mostrarFechaActual();
+        mostrarNombreDirector();
         
         cargarProgramasEducativos();
         cargarPeriodosEscolares();
@@ -57,6 +59,10 @@ public class FXMLGeneracionConstanciasController implements Initializable {
     
     private void mostrarFechaActual() {
         lbFechaExpedicion.setText(Utilidades.obtenerFechaActual());
+    }
+    
+    private void mostrarNombreDirector() {
+        lbDirector.setText(RecursosEstaticos.obtenerNombreDirector());
     }
     
     private void cargarProgramasEducativos() {
@@ -77,6 +83,8 @@ public class FXMLGeneracionConstanciasController implements Initializable {
         ChangeListener<Object> cambioProgramaPeriodoListener = new ChangeListener<Object>() {
             @Override
             public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+                ocultarErroresDeProgramaYPeriodo();
+
                 if (cbProgramaEducativo.getValue() != null && cbPeriodoEscolar.getValue() != null) {
                     cargarExperienciasEducativas();
                     cbExperienciaEducativa.setDisable(false);
@@ -88,6 +96,16 @@ public class FXMLGeneracionConstanciasController implements Initializable {
 
         cbProgramaEducativo.valueProperty().addListener(cambioProgramaPeriodoListener);
         cbPeriodoEscolar.valueProperty().addListener(cambioProgramaPeriodoListener);
+    }
+    
+    private void ocultarErroresDeProgramaYPeriodo() {
+        if(cbProgramaEducativo.getValue() != null) {
+            lbErrorProgramaEducativo.setVisible(false);
+        }
+        
+        if(cbPeriodoEscolar.getValue() != null) {
+            lbErrorPeriodoEscolar.setVisible(false);
+        }
     }
     
     private void cargarExperienciasEducativas() {
@@ -107,6 +125,7 @@ public class FXMLGeneracionConstanciasController implements Initializable {
                 if (newValue != null) {
                     tfBloque.setText(newValue.getBloque());
                     tfSeccion.setText(newValue.getSeccion());
+                    lbErrorExperienciaEducativa.setVisible(false);
                 }
             }
         });
@@ -114,7 +133,44 @@ public class FXMLGeneracionConstanciasController implements Initializable {
 
     @FXML
     private void generarConstanciaClic(ActionEvent event) {
+        ocultarErrores();
         
+        if(validarCampos()) {
+            
+        } else {
+            Utilidades.mostrarDialogoSimple(
+                "Campos inválidos", 
+                "Para poder generar su constancia, corrija la información indicada", 
+                Alert.AlertType.WARNING
+            );
+        }
+    }
+    
+    private void ocultarErrores() {
+        lbErrorExperienciaEducativa.setVisible(false);
+        lbErrorPeriodoEscolar.setVisible(false);
+        lbErrorProgramaEducativo.setVisible(false);
+    }
+    
+    private boolean validarCampos() {
+        boolean camposValidos = true;
+        
+        if(cbExperienciaEducativa.getValue() == null) {
+            lbErrorExperienciaEducativa.setVisible(true);
+            camposValidos = false;
+        }
+        
+        if(cbPeriodoEscolar.getValue() == null) {
+            lbErrorPeriodoEscolar.setVisible(true);
+            camposValidos = false;
+        }
+        
+        if(cbProgramaEducativo.getValue() == null) {
+            lbErrorProgramaEducativo.setVisible(true);
+            camposValidos = false;
+        }
+        
+        return camposValidos;
     }
 
     @FXML

@@ -8,6 +8,10 @@ import javafxsigacop.modelo.pojo.PeriodoEscolar;
 import javafxsigacop.modelo.pojo.ProgramaEducativo;
 
 public class RecursosEstaticos {
+    public static String obtenerNombreDirector() {
+        return "Luis Gerardo Montané Jiménez";
+    }
+            
     public static ArrayList<ProgramaEducativo> obtenerProgramasEducativos() {
         return new ArrayList(Arrays.asList(
             new ProgramaEducativo("IS", "Ingeniería de Software"),
