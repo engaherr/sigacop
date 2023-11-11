@@ -14,7 +14,11 @@ public class SesionDAO {
         Connection conexion = ConexionBD.abrirConexionBD();
         if(conexion != null){
             try{
-                String consulta = "SELECT * FROM cuentas WHERE numero_personal = ? and contrasenha = ?;";
+                String consulta = "SELECT c.numero_personal, c.id_cuenta, c.contrasenha, c.es_administrativo, \n" +
+                    "u.nombre, u.apellido_paterno, u.apellido_materno, u.telefono, u.correo_institucional \n" +
+                    "FROM cuentas c INNER JOIN usuarios u \n" +
+                    "ON c.numero_personal = u.numero_personal\n" +
+                    "WHERE c.numero_personal = ? AND contrasenha = ?";
                 PreparedStatement prepararSentencia = conexion.prepareStatement(consulta);
                 prepararSentencia.setInt(1, numeroPersonal);
                 prepararSentencia.setString(2, contrasenha);
@@ -23,8 +27,13 @@ public class SesionDAO {
                 if(resultado.next()){
                     cuentaVerificada.setContrasenha(resultado.getString("contrasenha"));
                     cuentaVerificada.setIdCuenta(resultado.getInt("id_cuenta"));
-                    cuentaVerificada.setNumeroPersonal(resultado.getInt("numero_personal"));
+                    cuentaVerificada.setNumeroPersonal(resultado.getInt("numero_personal")); //TODO
                     cuentaVerificada.setEsAdministrativo(resultado.getBoolean("es_administrativo"));
+                    cuentaVerificada.setNombre(resultado.getString("nombre"));
+                    cuentaVerificada.setApellidoMaterno(resultado.getString("apellido_materno"));
+                    cuentaVerificada.setApellidoPaterno(resultado.getString("apellido_paterno"));
+                    cuentaVerificada.setCorreoInstitucional(resultado.getString("correo_institucional"));
+                    cuentaVerificada.setTelefono(resultado.getString("telefono"));
                 }
                 conexion.close();
             } catch (SQLException ex){
@@ -34,5 +43,5 @@ public class SesionDAO {
             cuentaVerificada.setCodigoRespuesta(Constantes.ERROR_CONEXION);
         }
         return cuentaVerificada;
-    }
+    }    
 }
