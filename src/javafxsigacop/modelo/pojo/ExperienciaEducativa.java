@@ -6,15 +6,17 @@ public class ExperienciaEducativa {
     private String bloque;
     private String seccion;
     private String idPeriodoEscolar;
+    private String creditos;
 
     public ExperienciaEducativa() {
     }
 
-    public ExperienciaEducativa(String nombre, String bloque, String seccion, String idProgramaEducativo, String idPeriodoEscolar) {
+    public ExperienciaEducativa(String nombre, String bloque, String seccion, String creditos, String idProgramaEducativo, String idPeriodoEscolar) {
         this.nombre = nombre;
         this.idProgramaEducativo = idProgramaEducativo;
         this.bloque = bloque;
         this.seccion = seccion;
+        this.creditos = creditos;
         this.idPeriodoEscolar = idPeriodoEscolar;
     }
 
@@ -48,6 +50,14 @@ public class ExperienciaEducativa {
 
     public void setSeccion(String seccion) {
         this.seccion = seccion;
+    }
+
+    public String getCreditos() {
+        return creditos;
+    }
+
+    public void setCreditos(String creditos) {
+        this.creditos = creditos;
     }
 
     public String getIdPeriodoEscolar() {
