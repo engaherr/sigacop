@@ -14,26 +14,28 @@ public class SesionDAO {
         Connection conexion = ConexionBD.abrirConexionBD();
         if(conexion != null){
             try{
-                String consulta = "SELECT * FROM cuentas WHERE numero_personal = ? and contrasenha = ?;";
+                String consulta = "SELECT c.numero_personal, c.id_cuenta, c.contrasenha, c.es_administrativo, \n" +
+                    "u.nombre, u.apellido_paterno, u.apellido_materno, u.telefono, u.correo_institucional \n" +
+                    "FROM cuentas c INNER JOIN usuarios u \n" +
+                    "ON c.numero_personal = u.numero_personal\n" +
+                    "WHERE c.numero_personal = ? AND contrasenha = ?";
                 PreparedStatement prepararSentencia = conexion.prepareStatement(consulta);
                 prepararSentencia.setInt(1, numeroPersonal);
-                System.out.println("Setteo de numeroPersonal correcto");
                 prepararSentencia.setString(2, contrasenha);
-                System.out.println("Setteo de contra correcto");
                 ResultSet resultado = prepararSentencia.executeQuery();
                 cuentaVerificada.setCodigoRespuesta(Constantes.OPERACION_EXITOSA);
                 if(resultado.next()){
                     cuentaVerificada.setContrasenha(resultado.getString("contrasenha"));
-                    System.out.println("Setteo de contra en POJO correcto");
                     cuentaVerificada.setIdCuenta(resultado.getInt("id_cuenta"));
-                    System.out.println("Setteo de id en POJO correcto");
-                    cuentaVerificada.setNumeroPersonal(resultado.getInt("numero_personal"));
-                    System.out.println("Setteo de numeroPersonal en POJO correcto");
+                    cuentaVerificada.setNumeroPersonal(resultado.getInt("numero_personal")); //TODO
                     cuentaVerificada.setEsAdministrativo(resultado.getBoolean("es_administrativo"));
-                    System.out.println("Setteo de esAdmin en POJO correcto");
+                    cuentaVerificada.setNombre(resultado.getString("nombre"));
+                    cuentaVerificada.setApellidoMaterno(resultado.getString("apellido_materno"));
+                    cuentaVerificada.setApellidoPaterno(resultado.getString("apellido_paterno"));
+                    cuentaVerificada.setCorreoInstitucional(resultado.getString("correo_institucional"));
+                    cuentaVerificada.setTelefono(resultado.getString("telefono"));
                 }
                 conexion.close();
-                System.out.println("cierre de Bd correcto");
             } catch (SQLException ex){
                 cuentaVerificada.setCodigoRespuesta(Constantes.ERROR_CONSULTA);
             }
@@ -41,5 +43,5 @@ public class SesionDAO {
             cuentaVerificada.setCodigoRespuesta(Constantes.ERROR_CONEXION);
         }
         return cuentaVerificada;
-    }
+    }    
 }

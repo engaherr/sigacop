@@ -1,11 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxsigacop.controladores.FXMLPrincipalController">
-    
+<AnchorPane id="AnchorPane" prefHeight="470.0" prefWidth="700.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="javafxsigacop.controladores.FXMLPrincipalController">
+
+    <!-- Pie de Página -->
+    <HBox alignment="CENTER" prefHeight="31.0" prefWidth="1000.0" style="-fx-background-color: #045bab;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <Label style="-fx-text-fill: white; -fx-font-size: 12px;" text="© 2023 Universidad Veracruzana. Todos los derechos reservados." textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+    </HBox>
+   <Pane prefHeight="77.0" prefWidth="1000.0" style="-fx-background-color: #045bab;">
+      <children>
+         <Label layoutX="161.0" layoutY="22.0" text="Sistema de Generación Automática de Constancias para Profesores" textFill="WHITE">
+            <font>
+               <Font name="Roboto Regular" size="23.0" />
+            </font>
+         </Label>
+         <ImageView fx:id="imgMenu" fitHeight="40.0" fitWidth="40.0" layoutX="28.0" layoutY="19.0" onMouseClicked="#clicAbrirMenu" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../recursos/menu-icono.png" />
+            </image>
+         </ImageView>
+      </children>
+   </Pane>
+   <Pane fx:id="paneMenu" layoutX="-275.0" layoutY="53.0" prefHeight="544.0" prefWidth="275.0" style="-fx-background-color: #045bab;">
+      <children>
+         <Pane fx:id="paneGenerarConstancia" layoutX="7.0" layoutY="30.0" onMouseClicked="#clicGenerarConstancia" prefHeight="50.0" prefWidth="237.0">
+            <children>
+               <ImageView fitHeight="31.0" fitWidth="28.0" layoutX="11.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../recursos/documento-icono.png" />
+                  </image>
+               </ImageView>
+               <Label layoutX="48.0" layoutY="16.0" text="Generar Constancia" textFill="WHITE">
+                  <font>
+                     <Font name="Roboto Regular" size="15.0" />
+                  </font>
+               </Label>
+            </children>
+         </Pane>
+         <Pane layoutX="8.0" layoutY="473.0" onMouseClicked="#clicCerrarSesion" prefHeight="50.0" prefWidth="229.0">
+            <children>
+               <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="7.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../recursos/salir-icono.png" />
+                  </image>
+               </ImageView>
+               <Label layoutX="48.0" layoutY="16.0" text="Cerrar sesión" textFill="WHITE">
+                  <font>
+                     <Font name="Roboto Regular" size="15.0" />
+                  </font>
+               </Label>
+            </children>
+         </Pane>
+         <Pane layoutX="7.0" layoutY="86.0" onMouseClicked="#clicIrConstanciasSolicitadas" prefHeight="50.0" prefWidth="237.0">
+            <children>
+               <ImageView fitHeight="28.0" fitWidth="28.0" layoutX="11.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../recursos/historial-icono.png" />
+                  </image>
+               </ImageView>
+               <Label layoutX="48.0" layoutY="16.0" text="Constancias Solicitadas" textFill="WHITE">
+                  <font>
+                     <Font name="Roboto Regular" size="15.0" />
+                  </font>
+               </Label>
+            </children>
+         </Pane>
+         <Pane fx:id="paneAdminProfesores" layoutX="7.0" layoutY="30.0" onMouseClicked="#clicIrAdministradorProfesores" prefHeight="50.0" prefWidth="237.0" visible="false">
+            <children>
+               <ImageView fitHeight="31.0" fitWidth="28.0" layoutX="11.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../recursos/teacher-icon.png" />
+                  </image>
+               </ImageView>
+               <Label layoutX="48.0" layoutY="16.0" text="Administración de Profesores" textFill="WHITE">
+                  <font>
+                     <Font name="Roboto Regular" size="15.0" />
+                  </font>
+               </Label>
+            </children>
+         </Pane>
+      </children>
+   </Pane>
+   <ImageView fitHeight="300.0" fitWidth="300.0" layoutX="381.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../recursos/uv-fondo-imagen.png" />
+      </image>
+   </ImageView>
 </AnchorPane>

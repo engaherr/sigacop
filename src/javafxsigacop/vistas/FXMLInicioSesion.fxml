@@ -25,7 +25,7 @@
          <children>
             <ImageView fitHeight="463.0" fitWidth="769.0" layoutX="-53.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../recursos/fondo.jpg" />
+                  <Image url="@../recursos/fondo-imagen.jpg" />
                </image>
             </ImageView>
             <Pane layoutX="229.0" layoutY="57.0" opacity="0.9" prefHeight="300.0" prefWidth="250.0" style="-fx-border-radius: 5; -fx-background-radius: 10; -fx-background-color: white;">
@@ -66,7 +66,7 @@
             </Pane>
             <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="493.0" layoutY="376.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../recursos/placa.png" />
+                  <Image url="@../recursos/placa-imagen.png" />
                </image>
             </ImageView>
          </children>

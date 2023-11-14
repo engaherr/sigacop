@@ -15,6 +15,7 @@ public class JavaFXSIGACOP extends Application {
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
+        stage.setTitle("Inicio de sesión");
         stage.show();
     }
 
