@@ -13,12 +13,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafxsigacop.interfaces.INotificacionOperacion;
 import javafxsigacop.modelo.dao.CrudProfesoresDAO;
 import javafxsigacop.modelo.pojo.Cuenta;
 import javafxsigacop.respuestas.ExistenciaProfesor;
+import javafxsigacop.respuestas.ExistenciaPropiedad;
 import javafxsigacop.respuestas.ExistenciaRegistro;
 import javafxsigacop.utilidades.Validaciones;
 import javafxsigacop.utils.Constantes;
@@ -78,32 +78,6 @@ public class FXMLCrudProfesoresController implements Initializable {
             );
             return;
         }
-        ExistenciaRegistro existeRegistroRespuesta = 
-            verificarExistenciaRegistro();
-        int codigoRespuesta = existeRegistroRespuesta.getCodigoRespuesta();
-        if(codigoRespuesta != Constantes.OPERACION_EXITOSA) {
-            Utilidades.mostrarDialogoSimple(
-                "Error al guardar los datos", 
-                "Hubo un error al guardar la información, intente de nuevo", 
-                Alert.AlertType.WARNING
-            );
-            return;
-        }
-        
-        if(existeRegistroRespuesta.getExiste()) {
-            tfNumeroPersonal.setStyle(Constantes.CAMPO_ESTILOS_ERROR);
-            String mensajeAdvertencia = String.format(
-                "Ya existe un profesor registrado con ese número de personal, por favor cambie su valor"
-            );
-            
-            Utilidades.mostrarDialogoSimple(
-                "Ya existe ese numero de personal", 
-                mensajeAdvertencia, 
-                Alert.AlertType.WARNING
-            );
-            return;
-        }
-        
         guardarInformacionProfesor();
         cerrarVentana();
     }
@@ -119,6 +93,7 @@ public class FXMLCrudProfesoresController implements Initializable {
             lblTituloPantallaCrud.setText("Editar información de usuario");
             btnRegistrar.setText("Actualizar");
             idProfesorEdicion = usuarioSeleccionado.getNumeroPersonal();
+            cargarInformacionUsuario(usuarioSeleccionado.getNumeroPersonal());
         } else {
             lblTituloPantallaCrud.setText("Registrar profesor");
             btnRegistrar.setText("Registrar");
@@ -170,14 +145,6 @@ public class FXMLCrudProfesoresController implements Initializable {
                 cerrarVentana();
                 break;    
         }
-    }
-    private ExistenciaRegistro verificarExistenciaRegistro() {
-        ExistenciaProfesor respuesta = 
-            new ExistenciaProfesor();
-        respuesta.setCodigoRespuesta(Constantes.OPERACION_EXITOSA);
-        respuesta.setExiste(false);
-        return null;
-        
     }
     
     private void cerrarVentana() {
@@ -233,5 +200,40 @@ public class FXMLCrudProfesoresController implements Initializable {
         tfApellidoMaterno.setStyle(Constantes.CAMPO_ESTILOS_BASE);
         tfCorreoInstitucional.setStyle(Constantes.CAMPO_ESTILOS_BASE);
         tfTelefono.setStyle(Constantes.CAMPO_ESTILOS_BASE);
+    }
+
+    private void cargarInformacionUsuario(int numeroPersonal) {
+        ExistenciaProfesor respuesta = CrudProfesoresDAO
+            .obtenerProfesorPorNumeroPersonal(numeroPersonal);
+        
+        switch(respuesta.getCodigoRespuesta()){
+            case Constantes.ERROR_CONEXION:
+                Utilidades.mostrarDialogoSimple(
+                    "Sin conexión", 
+                    "No se puede recuperar la información por el momento", 
+                    Alert.AlertType.ERROR
+                );
+                cerrarVentana();
+                break;
+            case Constantes.ERROR_CONSULTA:
+                Utilidades.mostrarDialogoSimple(
+                    "Error al cargar los datos", 
+                    "Hubo un error al cargar la información", 
+                    Alert.AlertType.WARNING
+                );
+                cerrarVentana();
+                break;
+            case Constantes.OPERACION_EXITOSA:
+                llenarCamposProfesor(respuesta.getProfesor());
+                break;    
+        }
+    }
+    private void llenarCamposProfesor(Cuenta profesor) {
+        tfNombre.setText(profesor.getNombre());
+        tfApellidoPaterno.setText(profesor.getApellidoPaterno());
+        tfApellidoMaterno.setText(profesor.getApellidoMaterno());
+        tfNumeroPersonal.setText(String.valueOf(profesor.getNumeroPersonal()));
+        tfCorreoInstitucional.setText(profesor.getCorreoInstitucional());
+        tfTelefono.setText(profesor.getTelefono());
     }
 }
