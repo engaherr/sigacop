@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -11,11 +12,16 @@
    <children>
       <Pane prefHeight="61.0" prefWidth="716.0" style="-fx-background-color: #045bab;">
          <children>
-            <Label fx:id="lblTituloTabla" layoutX="62.0" layoutY="14.0" text="Profesores registrados" textFill="WHITE">
+            <Label fx:id="lblTituloTabla" layoutX="101.0" layoutY="14.0" text="Profesores registrados" textFill="WHITE">
                <font>
                   <Font size="23.0" />
                </font>
             </Label>
+            <ImageView fitHeight="50.0" fitWidth="45.0" layoutX="15.0" layoutY="7.0" onMouseClicked="#clicRegresarPantallaPrincipal" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../recursos/flechaRegresar.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
       <TableView fx:id="tvProfesores" layoutX="59.0" layoutY="139.0" prefHeight="285.0" prefWidth="599.0">
