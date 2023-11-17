@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="470.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxsigacop.controladores.FXMLConsultarListaProfesoresController">
+   <children>
+      <Pane prefHeight="61.0" prefWidth="716.0" style="-fx-background-color: #045bab;">
+         <children>
+            <Label fx:id="lblTituloTabla" layoutX="62.0" layoutY="14.0" text="Profesores registrados" textFill="WHITE">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <TableView fx:id="tvProfesores" layoutX="59.0" layoutY="139.0" prefHeight="285.0" prefWidth="599.0">
+        <columns>
+          <TableColumn fx:id="tcNombre" prefWidth="192.0" text="Nombre" />
+          <TableColumn fx:id="tcTelefono" prefWidth="161.0" text="Telefono" />
+            <TableColumn fx:id="tcCorreoInstitucional" prefWidth="156.0" text="Correo institucional" />
+            <TableColumn fx:id="tcNoPersonal" prefWidth="89.0" text="No. de personal" />
+        </columns>
+      </TableView>
+      <Button layoutX="397.0" layoutY="94.0" mnemonicParsing="false" onAction="#btnEliminar" style="-fx-background-color: red;" text="Eliminar" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="484.0" layoutY="94.0" mnemonicParsing="false" onAction="#btnModificar" style="-fx-background-color: #28AD56;" text="Modificar" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="584.0" layoutY="94.0" mnemonicParsing="false" onAction="#btnAgregar" style="-fx-background-color: #28AD56;" text="Agregar" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

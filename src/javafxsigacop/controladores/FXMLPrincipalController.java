@@ -78,8 +78,8 @@ public class FXMLPrincipalController implements Initializable {
     private void clicIrAdministradorProfesores(MouseEvent event) {
         Stage escenarioBase = (Stage) imgMenu.getScene().getWindow();
         escenarioBase.setScene(Utilidades.inicializaEscena(
-                "vistas/FXMLCrudProfesores.fxml"));
-        escenarioBase.setTitle("Información profesor");
+                "vistas/FXMLConsultarListaProfesores.fxml"));
+        escenarioBase.setTitle("Profesores registrados");
         escenarioBase.show();
     }
     
