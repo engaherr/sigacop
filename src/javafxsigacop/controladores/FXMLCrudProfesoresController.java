@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -49,9 +50,15 @@ public class FXMLCrudProfesoresController implements Initializable {
     private Button btnRegistrar;
     @FXML
     private Label lblTituloPantallaCrud;
+    @FXML
+    private CheckBox cbAdministrador;
+    @FXML
+    private TextField tfContrasenhia;
+    
     private boolean esEdicion;
     private INotificacionOperacion interfazNotificacion;
     private int idProfesorEdicion;
+    
 
     /**
      * Initializes the controller class.
@@ -107,6 +114,7 @@ public class FXMLCrudProfesoresController implements Initializable {
         profesor.setApellidoMaterno(tfApellidoMaterno.getText());
         profesor.setTelefono(tfTelefono.getText());
         profesor.setCorreoInstitucional(tfCorreoInstitucional.getText());
+        profesor.setContrasenha(tfContrasenhia.getText());
         
         int codigoRespuesta;
         if(esEdicion) {
@@ -160,6 +168,8 @@ public class FXMLCrudProfesoresController implements Initializable {
         String correo = tfCorreoInstitucional.getText();
         String telefono = tfTelefono.getText();
         String numeroPersonal = tfNumeroPersonal.getText();
+        String contrasenhia = tfContrasenhia.getText();
+        
         
         if(nombre.isEmpty()) {
             camposValidos = false;
@@ -174,6 +184,10 @@ public class FXMLCrudProfesoresController implements Initializable {
         if(segundoApellido.isEmpty()) {
             camposValidos = false;
             tfApellidoMaterno.setStyle(Constantes.CAMPO_ESTILOS_ERROR);
+        }
+        if(contrasenhia.isEmpty()){
+            camposValidos = false;
+            tfContrasenhia.setStyle(Constantes.CAMPO_ESTILOS_ERROR);
         }
         
         if(!Validaciones.correoValido(correo)) {
@@ -200,6 +214,7 @@ public class FXMLCrudProfesoresController implements Initializable {
         tfApellidoMaterno.setStyle(Constantes.CAMPO_ESTILOS_BASE);
         tfCorreoInstitucional.setStyle(Constantes.CAMPO_ESTILOS_BASE);
         tfTelefono.setStyle(Constantes.CAMPO_ESTILOS_BASE);
+        tfContrasenhia.setStyle(Constantes.CAMPO_ESTILOS_BASE);
     }
 
     private void cargarInformacionUsuario(int numeroPersonal) {
@@ -235,5 +250,6 @@ public class FXMLCrudProfesoresController implements Initializable {
         tfNumeroPersonal.setText(String.valueOf(profesor.getNumeroPersonal()));
         tfCorreoInstitucional.setText(profesor.getCorreoInstitucional());
         tfTelefono.setText(profesor.getTelefono());
+        tfContrasenhia.setText(profesor.getContrasenha());
     }
 }

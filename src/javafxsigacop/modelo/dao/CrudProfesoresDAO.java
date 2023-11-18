@@ -74,39 +74,65 @@ public class CrudProfesoresDAO {
     }
     
     public static int registrarProfesor(Cuenta profesor) {
-        int codigoRespuesta = Constantes.OPERACION_EXITOSA;
-        
-        Connection conexionDB = ConexionBD.abrirConexionBD();
-        if(conexionDB != null) {
-            try {
-                String registroUsuario = "INSERT INTO usuarios "
-                    + "(numero_personal, nombre, apellido_paterno, apellido_materno, telefono, correo_institucional)"
+    int codigoRespuesta = Constantes.OPERACION_EXITOSA;
+
+    Connection conexionDB = ConexionBD.abrirConexionBD();
+    if (conexionDB != null) {
+        try {
+            String registroUsuario = "INSERT INTO usuarios "
+                    + "(numero_personal, nombre, apellido_paterno, "
+                    + "apellido_materno, telefono, correo_institucional)"
                     + "VALUES (?, ?, ?, ?, ?, ?)";
-                
-                PreparedStatement sentenciaPreparada = conexionDB.prepareStatement(
-                        registroUsuario,
-                        Statement.RETURN_GENERATED_KEYS
+
+            String registroCuenta = "INSERT INTO cuentas "
+                    + "(contrasenha, es_administrativo, numero_personal)"
+                    + "VALUES (?, ?, ?)";
+
+            PreparedStatement sentenciaUsuario = conexionDB.prepareStatement(
+                    registroUsuario,
+                    Statement.RETURN_GENERATED_KEYS
+            );
+            sentenciaUsuario.setInt(1, profesor.getNumeroPersonal());
+            sentenciaUsuario.setString(2, profesor.getNombre());
+            sentenciaUsuario.setString(3, profesor.getApellidoPaterno());
+            sentenciaUsuario.setString(4, profesor.getApellidoMaterno());
+            sentenciaUsuario.setString(5, profesor.getTelefono());
+            sentenciaUsuario.setString(6, profesor.getCorreoInstitucional());
+
+            int filasAfectadasUsuario = sentenciaUsuario.executeUpdate();
+
+            if (filasAfectadasUsuario != 1) {
+                codigoRespuesta = Constantes.ERROR_CONSULTA;
+            } else {
+                ResultSet generatedKeys = sentenciaUsuario.getGeneratedKeys();
+                int idUsuarioGenerado = -1;
+                if (generatedKeys.next()) {
+                    idUsuarioGenerado = generatedKeys.getInt(1);
+                }
+
+                PreparedStatement sentenciaCuenta = conexionDB.prepareStatement(
+                        registroCuenta
                 );
-                sentenciaPreparada.setInt(1, profesor.getNumeroPersonal());
-                sentenciaPreparada.setString(2, profesor.getNombre());
-                sentenciaPreparada.setString(3, profesor.getApellidoPaterno());
-                sentenciaPreparada.setString(4, profesor.getApellidoMaterno());
-                sentenciaPreparada.setString(5, profesor.getTelefono());
-                sentenciaPreparada.setString(6, profesor.getCorreoInstitucional());
-                
-                int filasAfectadas = sentenciaPreparada.executeUpdate();
-                if(filasAfectadas != 1) {
+                sentenciaCuenta.setString(1, profesor.getContrasenha());
+                sentenciaCuenta.setInt(2, 1);
+                sentenciaCuenta.setInt(3, profesor.getNumeroPersonal());
+
+                int filasAfectadasCuenta = sentenciaCuenta.executeUpdate();
+
+                if (filasAfectadasCuenta != 1) {
                     codigoRespuesta = Constantes.ERROR_CONSULTA;
                 }
-                conexionDB.close();
-            } catch(SQLException e) {
-                codigoRespuesta = Constantes.ERROR_CONSULTA;
             }
-        } else {
-            codigoRespuesta = Constantes.ERROR_CONEXION;
+            conexionDB.close();
+        } catch (SQLException e) {
+            codigoRespuesta = Constantes.ERROR_CONSULTA;
         }
-        return codigoRespuesta;
-    } 
+    } else {
+        codigoRespuesta = Constantes.ERROR_CONEXION;
+    }
+    return codigoRespuesta;
+}
+ 
     public static ListaUsuariosRespuesta recuperarListaUsuarios() {
         ListaUsuariosRespuesta respuesta = new ListaUsuariosRespuesta();
         respuesta.setCodigoRespuesta(Constantes.OPERACION_EXITOSA);

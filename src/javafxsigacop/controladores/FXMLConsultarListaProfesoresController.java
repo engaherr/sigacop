@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafxsigacop.interfaces.INotificacionOperacion;
@@ -68,11 +69,11 @@ public class FXMLConsultarListaProfesoresController
     }
     
     private void configurarTabla() {
-        tcNoPersonal.setCellValueFactory(new PropertyValueFactory("numero_personal"));
+        tcNoPersonal.setCellValueFactory(new PropertyValueFactory("numeroPersonal"));
         tcNombre.setCellValueFactory(new PropertyValueFactory("nombre"));
         tcTelefono.setCellValueFactory(new PropertyValueFactory("telefono"));
         tcCorreoInstitucional.setCellValueFactory(
-                new PropertyValueFactory("correo_institucional")
+                new PropertyValueFactory("correoInstitucional")
         );
         
     }
@@ -235,6 +236,10 @@ public class FXMLConsultarListaProfesoresController
     @Override
     public void notificarOperacionActualizar() {
         cargarInformacionTabla();
+    }
+
+    @FXML
+    private void clicRegresarPantallaPrincipal(MouseEvent event) {
     }
     
 }
