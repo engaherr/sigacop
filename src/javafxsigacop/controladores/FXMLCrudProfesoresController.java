@@ -19,8 +19,6 @@ import javafxsigacop.interfaces.INotificacionOperacion;
 import javafxsigacop.modelo.dao.CrudProfesoresDAO;
 import javafxsigacop.modelo.pojo.Cuenta;
 import javafxsigacop.respuestas.ExistenciaProfesor;
-import javafxsigacop.respuestas.ExistenciaPropiedad;
-import javafxsigacop.respuestas.ExistenciaRegistro;
 import javafxsigacop.utilidades.Validaciones;
 import javafxsigacop.utils.Constantes;
 import javafxsigacop.utils.Utilidades;
@@ -100,6 +98,7 @@ public class FXMLCrudProfesoresController implements Initializable {
             lblTituloPantallaCrud.setText("Editar información de usuario");
             btnRegistrar.setText("Actualizar");
             idProfesorEdicion = usuarioSeleccionado.getNumeroPersonal();
+            System.out.println(usuarioSeleccionado.getNumeroPersonal());
             cargarInformacionUsuario(usuarioSeleccionado.getNumeroPersonal());
         } else {
             lblTituloPantallaCrud.setText("Registrar profesor");

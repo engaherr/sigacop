@@ -23,55 +23,86 @@ import javafxsigacop.utils.Constantes;
 public class CrudProfesoresDAO {
     
     public static int actualizarProfesor (Cuenta profesor){
-        
-        return 0;
-        
-    }
-    public static ExistenciaProfesor obtenerProfesorPorNumeroPersonal(
-        int numeroPersonal
-    ) {
-        ExistenciaProfesor respuesta = new ExistenciaProfesor();
-        respuesta.setCodigoRespuesta(Constantes.OPERACION_EXITOSA);
-        
+        int codigoRespuesta = Constantes.OPERACION_EXITOSA;
         Connection conexionDB = ConexionBD.abrirConexionBD();
-        if(conexionDB != null) {
-            try {
-                String consulta = "SELECT numero_personal, nombre, apellido_paterno, "
-                        + "apellido_materno, telefono, correo_institucional\n" +
-                        "FROM sigacop.usuarios\n" +
-                        "WHERE numero_personal = ? ";
-                
-                PreparedStatement sentenciaPreparada 
-                    = conexionDB.prepareStatement(consulta);
-                sentenciaPreparada.setInt(1, numeroPersonal);
-                
-                ResultSet resultado = sentenciaPreparada.executeQuery();
-                if(resultado.next()) {
-                    Cuenta profesor = new Cuenta();
-                    
-                    profesor.setNombre(resultado.getString("nombre"));
-                    profesor.setApellidoPaterno(resultado.getString("apellido_paterno"));
-                    profesor.setApellidoMaterno(resultado.getString("apellido_materno"));
-                    profesor.setNumeroPersonal(
-                        resultado.getInt("numero_personal")
-                    );
-                    profesor.setCorreoInstitucional(
-                        resultado.getString("correo_institucional")
-                    );
-                    profesor.setTelefono(resultado.getString("telefono"));
-                    
-                    respuesta.setProfesor(profesor);
+            if (conexionDB != null) {
+                try {
+                    String actualizacionQuery = "UPDATE usuarios " 
+                            + "JOIN cuentas ON usuarios.numero_personal = cuentas.numero_personal " 
+                            + "SET nombre = ?, " 
+                            + "apellido_paterno = ?, " 
+                            + "apellido_materno = ?, " 
+                            + "correo_institucional = ?, " 
+                            + "telefono = ?, "
+                            + "contrasenha = ? " 
+                            + "WHERE usuarios.numero_personal = ?";
+
+                    PreparedStatement sentenciaPreparada = conexionDB.prepareStatement(actualizacionQuery);
+                    sentenciaPreparada.setString(1, profesor.getNombre());
+                    sentenciaPreparada.setString(2, profesor.getApellidoPaterno());
+                    sentenciaPreparada.setString(3, profesor.getApellidoMaterno());
+                    sentenciaPreparada.setString(4, profesor.getCorreoInstitucional());
+                    sentenciaPreparada.setString(5, profesor.getTelefono());
+                    sentenciaPreparada.setString(6, profesor.getContrasenha());
+                    sentenciaPreparada.setInt(7, profesor.getNumeroPersonal());
+
+                    int filasAfectadas = sentenciaPreparada.executeUpdate();
+                    if (filasAfectadas < 1 || filasAfectadas > 2) {
+                        codigoRespuesta = Constantes.ERROR_CONSULTA;
+                    }
+
+                    conexionDB.close();
+                } catch (SQLException e) {
+                    codigoRespuesta = Constantes.ERROR_CONSULTA;
                 }
-                conexionDB.close();
-            } catch(SQLException e) {
-                respuesta.setCodigoRespuesta(Constantes.ERROR_CONSULTA);
+            } else {
+                codigoRespuesta = Constantes.ERROR_CONEXION;
             }
-        } else {
-            respuesta.setCodigoRespuesta(Constantes.ERROR_CONEXION);
-        }
-        
-        return respuesta;
+        return codigoRespuesta;        
     }
+    
+    public static ExistenciaProfesor obtenerProfesorPorNumeroPersonal(int numeroPersonal) {
+    ExistenciaProfesor respuesta = new ExistenciaProfesor();
+    respuesta.setCodigoRespuesta(Constantes.OPERACION_EXITOSA);
+
+    Connection conexionDB = ConexionBD.abrirConexionBD();
+    if (conexionDB != null) {
+        try {
+            String consulta = "SELECT p.numero_personal, p.nombre, " +
+                "p.apellido_paterno, p.apellido_materno, p.telefono, " +
+                "p.correo_institucional, c.contrasenha " +
+                "FROM usuarios p " +
+                "INNER JOIN cuentas c ON p.numero_personal = c.numero_personal " +
+                "WHERE p.numero_personal = ?";
+
+            PreparedStatement sentenciaPreparada = conexionDB.prepareStatement(consulta);
+            sentenciaPreparada.setInt(1, numeroPersonal);
+
+            ResultSet resultado = sentenciaPreparada.executeQuery();
+            if (resultado.next()) {
+                Cuenta profesor = new Cuenta();
+
+                profesor.setNombre(resultado.getString("nombre"));
+                profesor.setApellidoPaterno(resultado.getString("apellido_paterno"));
+                profesor.setApellidoMaterno(resultado.getString("apellido_materno"));
+                profesor.setNumeroPersonal(resultado.getInt("numero_personal"));
+                profesor.setCorreoInstitucional(resultado.getString("correo_institucional"));
+                profesor.setContrasenha(resultado.getString("contrasenha"));
+                profesor.setTelefono(resultado.getString("telefono"));
+
+                respuesta.setProfesor(profesor);
+            }
+            conexionDB.close();
+        } catch (SQLException e) {
+            respuesta.setCodigoRespuesta(Constantes.ERROR_CONSULTA);
+        }
+    } else {
+        respuesta.setCodigoRespuesta(Constantes.ERROR_CONEXION);
+    }
+
+    return respuesta;
+}
+
     
     public static int registrarProfesor(Cuenta profesor) {
     int codigoRespuesta = Constantes.OPERACION_EXITOSA;
