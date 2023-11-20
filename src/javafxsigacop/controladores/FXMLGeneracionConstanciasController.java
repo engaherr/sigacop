@@ -31,10 +31,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafxsigacop.modelo.dao.ConstanciaDAO;
+import javafxsigacop.modelo.pojo.ConstanciaEE;
 import javafxsigacop.modelo.pojo.ExperienciaEducativa;
 import javafxsigacop.modelo.pojo.PeriodoEscolar;
 import javafxsigacop.modelo.pojo.ProgramaEducativo;
 import javafxsigacop.utilidades.RecursosEstaticos;
+import javafxsigacop.utils.Constantes;
+import javafxsigacop.utils.Utilidades;
 import javafxsigacop.utils.Utilidades;
 
 public class FXMLGeneracionConstanciasController implements Initializable {
@@ -185,9 +189,12 @@ public class FXMLGeneracionConstanciasController implements Initializable {
             );
         } else {
             try {
-                descargarDocumentoPDF(selectedDirectory.getAbsolutePath());
-                limpiarCampos();
-                mostrarMensajeGeneracionExitosa();
+                boolean constanciaGuardada = guardarRegistroConstancia();
+                if(constanciaGuardada) {
+                    descargarDocumentoPDF(selectedDirectory.getAbsolutePath());
+                    limpiarCampos();
+                    mostrarMensajeGeneracionExitosa();
+                }
             } catch (IOException e) {
                 Utilidades.mostrarDialogoSimple(
                     "Error de descarga", 
@@ -207,6 +214,7 @@ public class FXMLGeneracionConstanciasController implements Initializable {
     }
     
     private void descargarDocumentoPDF(String nombreCarpetaAGuardar) throws IOException, DocumentException {
+        //TO-DO: Recuperar informaciónd del singleton
         String nombreProfesor = "Erika Meneses Rico";
         String nombrePeriodo = cbPeriodoEscolar.getValue().getNombre();
         String nombrePrograma = cbProgramaEducativo.getValue().getNombre();
@@ -323,6 +331,55 @@ public class FXMLGeneracionConstanciasController implements Initializable {
 
         document.close();
         outputStream.close();
+    }
+    
+    private boolean guardarRegistroConstancia() {
+        boolean constanciaguardadaEnBD = false;
+        
+        //TO-DO: Recuperar informaciónd del singleton
+        int numeroPersonal = 1;
+        String nombrePeriodo = cbPeriodoEscolar.getValue().getNombre();
+        String nombrePrograma = cbProgramaEducativo.getValue().getNombre();
+        String nombreExperiencia = cbExperienciaEducativa.getValue().getNombre();        
+        String bloqueExperiencia = cbExperienciaEducativa.getValue().getBloque();
+        String seccionExperiencia = cbExperienciaEducativa.getValue().getSeccion();
+        String creditosExperiencia = cbExperienciaEducativa.getValue().getCreditos();        
+        String horasSemanaMes = cbExperienciaEducativa.getValue().getHorasSemanaMes();
+        
+        ConstanciaEE constancia = new ConstanciaEE();
+        constancia.setFechaExpedicion(Utilidades.obtenerFechaActualFormatoBD());
+        constancia.setNombreDirector(RecursosEstaticos.obtenerNombreDirector());
+        constancia.setNumeroPersonal(numeroPersonal);
+        constancia.setBloque(bloqueExperiencia);
+        constancia.setSeccion(seccionExperiencia);
+        constancia.setHorasSemanaMes(horasSemanaMes);
+        constancia.setProgramaEducativo(nombrePrograma);
+        constancia.setExperienciaEducativa(nombreExperiencia);
+        constancia.setPeriodoEscolar(nombrePeriodo);
+        constancia.setCreditosExperiencia(creditosExperiencia);
+        
+        int codigoRespuesta = ConstanciaDAO.guardarConstanciaEE(constancia);
+        switch (codigoRespuesta) {
+            case Constantes.OPERACION_EXITOSA:
+                constanciaguardadaEnBD = true;
+                break;
+            case Constantes.ERROR_CONEXION:
+                Utilidades.mostrarDialogoSimple(
+                    "Error de conexión", 
+                    "El sistema se encuentra enfrentando errores de conexión, "
+                    + "por favor intente en otro momento", 
+                    Alert.AlertType.ERROR
+                );
+            default:
+                Utilidades.mostrarDialogoSimple(
+                    "Error al guardar la constancia", 
+                    "Ocurrió un error al guardar la constancia, por favor "
+                    + "intente en otro momento", 
+                    Alert.AlertType.ERROR
+                );
+        }
+        
+        return constanciaguardadaEnBD;
     }
     
     private void mostrarMensajeGeneracionExitosa() {

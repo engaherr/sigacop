@@ -57,6 +57,14 @@ public class Utilidades {
         return fechaFormateada;
     }
     
+    public static String obtenerFechaActualFormatoBD() {
+        LocalDate fechaActual = LocalDate.now();
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd", new Locale("es", "ES"));
+
+        String fechaFormateada = fechaActual.format(formateador);
+        return fechaFormateada;
+    }
+    
     public static String obtenerFechaHoraActual() {
         LocalDateTime fechaHoraActual = LocalDateTime.now();
 
