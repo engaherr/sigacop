@@ -7,17 +7,19 @@ public class ExperienciaEducativa {
     private String seccion;
     private String idPeriodoEscolar;
     private String creditos;
+    private String horasSemanaMes;
 
     public ExperienciaEducativa() {
     }
 
-    public ExperienciaEducativa(String nombre, String bloque, String seccion, String creditos, String idProgramaEducativo, String idPeriodoEscolar) {
+    public ExperienciaEducativa(String nombre, String horasSemanaMes, String bloque, String seccion, String creditos, String idProgramaEducativo, String idPeriodoEscolar) {
         this.nombre = nombre;
         this.idProgramaEducativo = idProgramaEducativo;
         this.bloque = bloque;
         this.seccion = seccion;
         this.creditos = creditos;
         this.idPeriodoEscolar = idPeriodoEscolar;
+        this.horasSemanaMes = horasSemanaMes;
     }
 
     public String getNombre() {
@@ -66,6 +68,14 @@ public class ExperienciaEducativa {
 
     public void setIdPeriodoEscolar(String idPeriodoEscolar) {
         this.idPeriodoEscolar = idPeriodoEscolar;
+    }
+
+    public String getHorasSemanaMes() {
+        return horasSemanaMes;
+    }
+
+    public void setHorasSemanaMes(String horasSemanaMes) {
+        this.horasSemanaMes = horasSemanaMes;
     }
 
     @Override

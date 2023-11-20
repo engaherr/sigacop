@@ -56,4 +56,13 @@ public class Utilidades {
         String fechaFormateada = fechaActual.format(formateador);
         return fechaFormateada;
     }
+    
+    public static String obtenerFechaHoraActual() {
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss");
+        String fechaHoraFormateada = fechaHoraActual.format(formato);
+
+        return fechaHoraFormateada;
+    }
 }

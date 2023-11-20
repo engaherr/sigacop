@@ -4,6 +4,7 @@ package javafxsigacop.controladores;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
@@ -11,7 +12,9 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,6 +29,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import javafxsigacop.modelo.pojo.ExperienciaEducativa;
 import javafxsigacop.modelo.pojo.PeriodoEscolar;
 import javafxsigacop.modelo.pojo.ProgramaEducativo;
@@ -55,6 +60,8 @@ public class FXMLGeneracionConstanciasController implements Initializable {
     private Label lbErrorExperienciaEducativa;
     @FXML
     private Label lbErrorPeriodoEscolar;
+    @FXML
+    private TextField tfHorasSemanaMes;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -101,6 +108,7 @@ public class FXMLGeneracionConstanciasController implements Initializable {
                     cbExperienciaEducativa.setDisable(false);
                     tfBloque.setText("");
                     tfSeccion.setText("");
+                    tfHorasSemanaMes.setText("");
                 }
             }
         };
@@ -136,6 +144,7 @@ public class FXMLGeneracionConstanciasController implements Initializable {
                 if (newValue != null) {
                     tfBloque.setText(newValue.getBloque());
                     tfSeccion.setText(newValue.getSeccion());
+                    tfHorasSemanaMes.setText(newValue.getHorasSemanaMes());
                     lbErrorExperienciaEducativa.setVisible(false);
                 }
             }
@@ -147,7 +156,7 @@ public class FXMLGeneracionConstanciasController implements Initializable {
         ocultarErrores();
         
         if(validarCampos()) {
-            downloadPDFDocument();
+            generarConstancia();
         } else {
             Utilidades.mostrarDialogoSimple(
                 "Campos inválidos", 
@@ -163,125 +172,174 @@ public class FXMLGeneracionConstanciasController implements Initializable {
         lbErrorProgramaEducativo.setVisible(false);
     }
     
-    private void downloadPDFDocument() {
+    private void generarConstancia() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory = directoryChooser.showDialog((Stage) lbDirector.getScene().getWindow());
+
+        if(selectedDirectory == null){
+            Utilidades.mostrarDialogoSimple(
+                "Seleccione una carpeta", 
+                "Debe seleccionar la carpeta de destino en la que se "
+                    + "guardará la constancia", 
+                Alert.AlertType.WARNING
+            );
+        } else {
+            try {
+                descargarDocumentoPDF(selectedDirectory.getAbsolutePath());
+                limpiarCampos();
+                mostrarMensajeGeneracionExitosa();
+            } catch (IOException e) {
+                Utilidades.mostrarDialogoSimple(
+                    "Error de descarga", 
+                    "Ocurrió un error al descargar el archivo, por favor "
+                        + "intente de nuevo", 
+                    Alert.AlertType.WARNING
+                );
+            } catch (DocumentException e) {
+                Utilidades.mostrarDialogoSimple(
+                    "Error en formato de documento", 
+                    "Ocurrió un error al descargar el documento pdf por una "
+                        + "corrupción en su formato, por favor intente de nuevo", 
+                    Alert.AlertType.WARNING
+                );
+            }
+        }
+    }
+    
+    private void descargarDocumentoPDF(String nombreCarpetaAGuardar) throws IOException, DocumentException {
         String nombreProfesor = "Erika Meneses Rico";
         String nombrePeriodo = cbPeriodoEscolar.getValue().getNombre();
         String nombrePrograma = cbProgramaEducativo.getValue().getNombre();
         String nombreExperiencia = cbExperienciaEducativa.getValue().getNombre();        
         String bloqueExperiencia = cbExperienciaEducativa.getValue().getBloque();
         String seccionExperiencia = cbExperienciaEducativa.getValue().getSeccion();
-        String creditosExperiencia = cbExperienciaEducativa.getValue().getCreditos();
+        String creditosExperiencia = cbExperienciaEducativa.getValue().getCreditos();        
+        String horasSemanaMes = cbExperienciaEducativa.getValue().getHorasSemanaMes();
+        
+        Document document = new Document();
+        document.setMargins(100f, 100f, 70f, 70f);
 
-        try {
-            Document document = new Document();
-            document.setMargins(100f, 100f, 70f, 70f);
+        String nombreAutogeneradoPDF = "constanciaEE-" + Utilidades.obtenerFechaHoraActual() + ".pdf";
+        OutputStream outputStream = 
+            new FileOutputStream(new File(nombreCarpetaAGuardar, nombreAutogeneradoPDF));
 
-            OutputStream outputStream = 
-                new FileOutputStream(new File("C:\\Users\\ANGEL\\Desktop\\UV\\5.Quinto semestre\\Administración de proyectos\\prueba.pdf"));
+        PdfWriter.getInstance(document, outputStream);
+        document.open();
 
-            PdfWriter.getInstance(document, outputStream);
-            document.open();
-            
-            Paragraph parrafoAQuienCorresponda = new Paragraph(
-                "A quien corresponda",
-                FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-            );
-            parrafoAQuienCorresponda.setSpacingAfter(20f);
-            document.add(parrafoAQuienCorresponda);
-            
-            document.add(new Paragraph(
-                "​​El que suscribe, Director de la Facultad de Estadística "
-                    + "e Informática, de la Universidad Veracruzana ",
-                FontFactory.getFont(FontFactory.TIMES, 12)
-            ));
-            
-            Paragraph parrafoHaceConstar = new Paragraph(
-                "HACE CONSTAR",
-                FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-            );
-            parrafoHaceConstar.setAlignment(Element.ALIGN_CENTER);
-            parrafoHaceConstar.setSpacingBefore(10f);            
-            parrafoHaceConstar.setSpacingAfter(10f);
-            document.add(parrafoHaceConstar);
-            
-            Paragraph parrafoCurso = new Paragraph(
-                "​que el Mtro. ", 
-                FontFactory.getFont(FontFactory.TIMES, 12)
-            );
-            Chunk nombreProfesorBold = new Chunk(nombreProfesor, FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD));
-            parrafoCurso.add(nombreProfesorBold);
-            parrafoCurso.add(", impartió la siguiente experiencia educativa en el periodo " + nombrePeriodo);
-            parrafoCurso.setSpacingAfter(15f);
-            document.add(parrafoCurso);
-            
-            PdfPTable tablaEE = new PdfPTable(4);
-            tablaEE.setWidthPercentage(100);
-            tablaEE.addCell(new Paragraph(
-                "Programa educativo",
-                FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-            ));
-            tablaEE.addCell(new Paragraph(
-                "Experiencia educativa",
-                FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-            ));
-            tablaEE.addCell(new Paragraph(
-                "​Bloque/Sección/Créditos",
-                FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-            ));
-            tablaEE.addCell(new Paragraph(
-                "H/S/M",
-                FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-            ));
-            
-            tablaEE.addCell(new Paragraph(nombrePrograma, FontFactory.getFont(FontFactory.TIMES, 12)));
-            tablaEE.addCell(new Paragraph(nombreExperiencia, FontFactory.getFont(FontFactory.TIMES, 12)));
-            tablaEE.addCell(new Paragraph(bloqueExperiencia + "/" + seccionExperiencia + "/" + creditosExperiencia, FontFactory.getFont(FontFactory.TIMES, 12)));
-            tablaEE.addCell(new Paragraph("", FontFactory.getFont(FontFactory.TIMES, 12)));
-            document.add(tablaEE);
-            
-            Paragraph parrafoFinal = new Paragraph(
-                "A petición de la interesada y para los fines legales que a la "
-                    + "misma convenga, se extiende la presente en la ciudad de "
-                    + "Xalapa-Enríquez, Veracruz a fecha de " 
-                    + Utilidades.obtenerFechaActual() + ".", 
-                FontFactory.getFont(FontFactory.TIMES, 12)
-            );
-            parrafoFinal.setSpacingBefore(30f);            
-            parrafoFinal.setSpacingAfter(30f);
-            document.add(parrafoFinal);
-            
-            Paragraph parrafoAtentamente = new Paragraph(
-                "A t e n t a m e n t e", 
-                FontFactory.getFont(FontFactory.TIMES, 12)
-            );
-            parrafoAtentamente.setAlignment(Element.ALIGN_CENTER);
-            document.add(parrafoAtentamente);
-            Paragraph parrafoLIS = new Paragraph(
-                "​\"Lis de Veracruz: Arte, Ciencia, Luz\"", 
-                FontFactory.getFont(FontFactory.TIMES, 12)
-            );
-            parrafoLIS.setAlignment(Element.ALIGN_CENTER);
-            parrafoLIS.setSpacingAfter(40f);
-            document.add(parrafoLIS);
-            
-            Paragraph parrafoNombreDirector = new Paragraph(
-                RecursosEstaticos.obtenerNombreDirector(), 
-                FontFactory.getFont(FontFactory.TIMES, 12)
-            );
-            parrafoNombreDirector.setAlignment(Element.ALIGN_CENTER);
-            document.add(parrafoNombreDirector);
-            Paragraph parrafoDirector = new Paragraph(
-                "Director", 
-                FontFactory.getFont(FontFactory.TIMES, 12)
-            );
-            parrafoDirector.setAlignment(Element.ALIGN_CENTER);
-            document.add(parrafoDirector);
-            
-            document.close();
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Paragraph parrafoAQuienCorresponda = new Paragraph(
+            "A quien corresponda",
+            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
+        );
+        parrafoAQuienCorresponda.setSpacingAfter(20f);
+        document.add(parrafoAQuienCorresponda);
+
+        document.add(new Paragraph(
+            "​​El que suscribe, Director de la Facultad de Estadística "
+                + "e Informática, de la Universidad Veracruzana ",
+            FontFactory.getFont(FontFactory.TIMES, 12)
+        ));
+
+        Paragraph parrafoHaceConstar = new Paragraph(
+            "HACE CONSTAR",
+            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
+        );
+        parrafoHaceConstar.setAlignment(Element.ALIGN_CENTER);
+        parrafoHaceConstar.setSpacingBefore(10f);            
+        parrafoHaceConstar.setSpacingAfter(10f);
+        document.add(parrafoHaceConstar);
+
+        Paragraph parrafoCurso = new Paragraph(
+            "​que el Mtro. ", 
+            FontFactory.getFont(FontFactory.TIMES, 12)
+        );
+        Chunk nombreProfesorBold = new Chunk(nombreProfesor, FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD));
+        parrafoCurso.add(nombreProfesorBold);
+        parrafoCurso.add(", impartió la siguiente experiencia educativa en el periodo " + nombrePeriodo);
+        parrafoCurso.setSpacingAfter(15f);
+        document.add(parrafoCurso);
+
+        PdfPTable tablaEE = new PdfPTable(4);
+        tablaEE.setWidthPercentage(100);
+        tablaEE.addCell(new Paragraph(
+            "Programa educativo",
+            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
+        ));
+        tablaEE.addCell(new Paragraph(
+            "Experiencia educativa",
+            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
+        ));
+        tablaEE.addCell(new Paragraph(
+            "​Bloque/Sección/Créditos",
+            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
+        ));
+        tablaEE.addCell(new Paragraph(
+            "H/S/M",
+            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
+        ));
+
+        tablaEE.addCell(new Paragraph(nombrePrograma, FontFactory.getFont(FontFactory.TIMES, 12)));
+        tablaEE.addCell(new Paragraph(nombreExperiencia, FontFactory.getFont(FontFactory.TIMES, 12)));
+        tablaEE.addCell(new Paragraph(bloqueExperiencia + "/" + seccionExperiencia + "/" + creditosExperiencia, FontFactory.getFont(FontFactory.TIMES, 12)));
+        tablaEE.addCell(new Paragraph(horasSemanaMes, FontFactory.getFont(FontFactory.TIMES, 12)));
+        document.add(tablaEE);
+
+        Paragraph parrafoFinal = new Paragraph(
+            "A petición de la interesada y para los fines legales que a la "
+                + "misma convenga, se extiende la presente en la ciudad de "
+                + "Xalapa-Enríquez, Veracruz a fecha de " 
+                + Utilidades.obtenerFechaActual() + ".", 
+            FontFactory.getFont(FontFactory.TIMES, 12)
+        );
+        parrafoFinal.setSpacingBefore(30f);            
+        parrafoFinal.setSpacingAfter(30f);
+        document.add(parrafoFinal);
+
+        Paragraph parrafoAtentamente = new Paragraph(
+            "A t e n t a m e n t e", 
+            FontFactory.getFont(FontFactory.TIMES, 12)
+        );
+        parrafoAtentamente.setAlignment(Element.ALIGN_CENTER);
+        document.add(parrafoAtentamente);
+        Paragraph parrafoLIS = new Paragraph(
+            "​\"Lis de Veracruz: Arte, Ciencia, Luz\"", 
+            FontFactory.getFont(FontFactory.TIMES, 12)
+        );
+        parrafoLIS.setAlignment(Element.ALIGN_CENTER);
+        parrafoLIS.setSpacingAfter(40f);
+        document.add(parrafoLIS);
+
+        Paragraph parrafoNombreDirector = new Paragraph(
+            RecursosEstaticos.obtenerNombreDirector(), 
+            FontFactory.getFont(FontFactory.TIMES, 12)
+        );
+        parrafoNombreDirector.setAlignment(Element.ALIGN_CENTER);
+        document.add(parrafoNombreDirector);
+        Paragraph parrafoDirector = new Paragraph(
+            "Director", 
+            FontFactory.getFont(FontFactory.TIMES, 12)
+        );
+        parrafoDirector.setAlignment(Element.ALIGN_CENTER);
+        document.add(parrafoDirector);
+
+        document.close();
+        outputStream.close();
+    }
+    
+    private void mostrarMensajeGeneracionExitosa() {
+        Utilidades.mostrarDialogoSimple(
+            "Constancia generada exitosamente", 
+            "La constancia de experiencia docente se generó de forma exitosa", 
+            Alert.AlertType.INFORMATION
+        );
+    }
+    
+    private void limpiarCampos() {
+        tfBloque.setText("");
+        tfSeccion.setText("");
+        tfHorasSemanaMes.setText("");
+        cbProgramaEducativo.setValue(null);
+        cbExperienciaEducativa.setValue(null);
+        cbPeriodoEscolar.setValue(null);
     }
     
     private boolean validarCampos() {
