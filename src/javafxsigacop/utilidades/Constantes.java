@@ -14,5 +14,8 @@ public class Constantes {
     public static final int ERROR_CONEXION = 500;
     public static final int ERROR_CONSULTA = 501;
     
+    public static final String CAMPO_ESTILOS_ERROR = 
+            "-fx-border-color: RED; -fx-border-width: 1; -fx-border-radius: 2;";
+    public static final String CAMPO_ESTILOS_BASE = "-fx-border-width: 0;";
     
 }
