@@ -37,7 +37,7 @@ import javafxsigacop.modelo.pojo.ExperienciaEducativa;
 import javafxsigacop.modelo.pojo.PeriodoEscolar;
 import javafxsigacop.modelo.pojo.ProgramaEducativo;
 import javafxsigacop.utilidades.RecursosEstaticos;
-import javafxsigacop.utils.Constantes;
+import javafxsigacop.utilidades.Constantes;
 import javafxsigacop.utils.Utilidades;
 import javafxsigacop.utils.Utilidades;
 

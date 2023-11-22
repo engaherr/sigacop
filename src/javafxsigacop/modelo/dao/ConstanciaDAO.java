@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javafxsigacop.modelo.ConexionBD;
 import javafxsigacop.modelo.pojo.ConstanciaEE;
-import javafxsigacop.utils.Constantes;
+import javafxsigacop.utilidades.Constantes;
 
 public class ConstanciaDAO {
     public static int guardarConstanciaEE(ConstanciaEE constancia) {

@@ -20,7 +20,7 @@ import javafxsigacop.modelo.dao.CrudProfesoresDAO;
 import javafxsigacop.modelo.pojo.Cuenta;
 import javafxsigacop.respuestas.ExistenciaProfesor;
 import javafxsigacop.utilidades.Validaciones;
-import javafxsigacop.utils.Constantes;
+import javafxsigacop.utilidades.Constantes;
 import javafxsigacop.utils.Utilidades;
 
 /**

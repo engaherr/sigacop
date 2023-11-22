@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafxsigacop.modelo.ConexionBD;
 import javafxsigacop.modelo.pojo.Cuenta;
-import javafxsigacop.utils.Constantes;
+import javafxsigacop.utilidades.Constantes;
 
 public class SesionDAO {
     public static Cuenta verificarSesion(int numeroPersonal, String contrasenha){

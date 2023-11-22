@@ -14,7 +14,7 @@ import javafxsigacop.modelo.ConexionBD;
 import javafxsigacop.modelo.pojo.Cuenta;
 import javafxsigacop.respuestas.ExistenciaProfesor;
 import javafxsigacop.respuestas.ListaUsuariosRespuesta;
-import javafxsigacop.utils.Constantes;
+import javafxsigacop.utilidades.Constantes;
 
 /**
  *

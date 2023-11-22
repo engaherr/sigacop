@@ -6,7 +6,7 @@
 * Códigos a lo largo de las clases del sistema. Hecho en clase de Principios de Construcción de 
 * Software con el profesor autor de la clase
 */
-package javafxsigacop.utils;
+package javafxsigacop.utilidades;
 
 public class Constantes {
     
