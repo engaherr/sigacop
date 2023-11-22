@@ -38,7 +38,7 @@ import javafxsigacop.modelo.pojo.PeriodoEscolar;
 import javafxsigacop.modelo.pojo.ProgramaEducativo;
 import javafxsigacop.utilidades.RecursosEstaticos;
 import javafxsigacop.utilidades.Constantes;
-import javafxsigacop.utils.Utilidades;
+import javafxsigacop.modelo.pojo.Cuenta;
 import javafxsigacop.utils.Utilidades;
 
 public class FXMLGeneracionConstanciasController implements Initializable {
@@ -214,8 +214,7 @@ public class FXMLGeneracionConstanciasController implements Initializable {
     }
     
     private void descargarDocumentoPDF(String nombreCarpetaAGuardar) throws IOException, DocumentException {
-        //TO-DO: Recuperar informaciónd del singleton
-        String nombreProfesor = "Erika Meneses Rico";
+        String nombreProfesor = Cuenta.getInstanciaSingleton().toString();
         String nombrePeriodo = cbPeriodoEscolar.getValue().getNombre();
         String nombrePrograma = cbProgramaEducativo.getValue().getNombre();
         String nombreExperiencia = cbExperienciaEducativa.getValue().getNombre();        
