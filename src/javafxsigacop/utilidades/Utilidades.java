@@ -8,8 +8,10 @@
 package javafxsigacop.utils;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Optional;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -46,14 +48,29 @@ public class Utilidades {
         Optional<ButtonType> botonClic = alertaConfirmacion.showAndWait();
         return (botonClic.get() == ButtonType.OK);
     }
-    
-    
-    
 
-public static String obtenerFechaActual() {
-    LocalDateTime fechaActual = LocalDateTime.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    return fechaActual.format(formatter);
-}
+    public static String obtenerFechaActual() {
+        LocalDate fechaActual = LocalDate.now();
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
 
+        String fechaFormateada = fechaActual.format(formateador);
+        return fechaFormateada;
+    }
+    
+    public static String obtenerFechaActualFormatoBD() {
+        LocalDate fechaActual = LocalDate.now();
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd", new Locale("es", "ES"));
+
+        String fechaFormateada = fechaActual.format(formateador);
+        return fechaFormateada;
+    }
+    
+    public static String obtenerFechaHoraActual() {
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss");
+        String fechaHoraFormateada = fechaHoraActual.format(formato);
+
+        return fechaHoraFormateada;
+    }
 }

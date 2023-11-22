@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="470.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxsigacop.controladores.FXMLGeneracionConstanciasController">
+   <children>
+      <Pane prefHeight="60.0" prefWidth="707.0" style="-fx-background-color: #045bab;">
+         <children>
+            <Label layoutX="31.0" layoutY="17.0" text="Generación de constancias" textFill="WHITE">
+               <font>
+                  <Font name="Microsoft JhengHei UI Bold" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <TabPane layoutY="60.0" prefHeight="410.0" prefWidth="707.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Experiencia docente">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="69.0" layoutY="25.0" text="Constancia de Experiencia Docente">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="71.0" layoutY="102.0" text="Programa educativo">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="cbProgramaEducativo" layoutX="71.0" layoutY="120.0" prefHeight="25.0" prefWidth="271.0" />
+                        <Label fx:id="lbErrorProgramaEducativo" layoutX="71.0" layoutY="145.0" text="Debe seleccionar un programa educativo" textFill="#c60d0d" visible="false">
+                           <font>
+                              <Font name="Microsoft JhengHei UI" size="11.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="367.0" layoutY="162.0" text="Bloque">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="514.0" layoutY="163.0" text="Sección">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lbErrorExperienciaEducativa" layoutX="367.0" layoutY="144.0" text="Debe seleccionar una experiencia educativa" textFill="#c60d0d" visible="false">
+                           <font>
+                              <Font name="Microsoft JhengHei UI" size="11.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="cbExperienciaEducativa" disable="true" layoutX="367.0" layoutY="119.0" prefHeight="25.0" prefWidth="269.0" />
+                        <Label layoutX="367.0" layoutY="102.0" text="Experiencia educativa">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="72.0" layoutY="163.0" text="Periodo escolar">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="cbPeriodoEscolar" layoutX="72.0" layoutY="180.0" prefHeight="25.0" prefWidth="269.0" />
+                        <Label fx:id="lbErrorPeriodoEscolar" layoutX="72.0" layoutY="205.0" text="Debe seleccionar un periodo escolar" textFill="#c60d0d" visible="false">
+                           <font>
+                              <Font name="Microsoft JhengHei UI" size="11.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="71.0" layoutY="63.0" text="Fecha de expedición: ">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lbFechaExpedicion" layoutX="201.0" layoutY="64.0">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Button defaultButton="true" layoutX="393.0" layoutY="310.0" mnemonicParsing="false" onAction="#generarConstanciaClic" style="-fx-background-color: #28AD56; -fx-padding: 8 16 8 16; -fx-cursor: hand;" text="Generar constancia" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button cancelButton="true" layoutX="558.0" layoutY="310.0" mnemonicParsing="false" onAction="#cancelarGeneracionClic" style="-fx-background-color: #c60d0d; -fx-padding: 8 16 8 16; -fx-cursor: hand;" text="Cancelar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Button>
+                        <Label layoutX="72.0" layoutY="238.0" text="Docente:">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="72.0" layoutY="265.0" text="Director:">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lbDocente" layoutX="131.0" layoutY="238.0">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lbDirector" layoutX="129.0" layoutY="265.0">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="tfBloque" disable="true" layoutX="366.0" layoutY="180.0" prefHeight="25.0" prefWidth="121.0" />
+                        <TextField fx:id="tfSeccion" disable="true" layoutX="513.0" layoutY="180.0" prefHeight="25.0" prefWidth="123.0" />
+                        <TextField fx:id="tfHorasSemanaMes" disable="true" layoutX="366.0" layoutY="231.0" prefHeight="25.0" prefWidth="121.0" />
+                        <Label layoutX="367.0" layoutY="213.0" text="H/S/M">
+                           <font>
+                              <Font name="Microsoft JhengHei UI Bold" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+          <Tab disable="true" text="Producto academico">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+            <Tab disable="true" text="Actualización plan estudio">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab disable="true" text="Certificación plan estudio">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab disable="true" text="Trabajos Recepcionales">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab disable="true" text="Proyecto de campo">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
