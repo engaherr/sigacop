@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package javafxsigacop.modelo.dao;
 
 import java.sql.Connection;
@@ -14,12 +10,8 @@ import javafxsigacop.modelo.ConexionBD;
 import javafxsigacop.modelo.pojo.Cuenta;
 import javafxsigacop.respuestas.ExistenciaProfesor;
 import javafxsigacop.respuestas.ListaUsuariosRespuesta;
-import javafxsigacop.utils.Constantes;
+import javafxsigacop.utilidades.Constantes;
 
-/**
- *
- * @author dnava
- */
 public class CrudProfesoresDAO {
     
     public static int actualizarProfesor (Cuenta profesor){

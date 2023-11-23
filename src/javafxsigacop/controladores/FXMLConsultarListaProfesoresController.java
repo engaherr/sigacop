@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxsigacop.controladores;
 
 import java.io.IOException;
@@ -24,18 +20,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafxsigacop.interfaces.INotificacionOperacion;
-import javafxsigacop.interfaces.INotificacionRegreso;
 import javafxsigacop.modelo.dao.CrudProfesoresDAO;
 import javafxsigacop.modelo.pojo.Cuenta;
 import javafxsigacop.respuestas.ListaUsuariosRespuesta;
-import javafxsigacop.utils.Constantes;
-import javafxsigacop.utils.Utilidades;
+import javafxsigacop.utilidades.Constantes;
+import javafxsigacop.utilidades.Utilidades;
 
-/**
- * FXML Controller class
- *
- * @author dnava
- */
 public class FXMLConsultarListaProfesoresController 
         implements Initializable, INotificacionOperacion{
 
@@ -53,20 +43,11 @@ public class FXMLConsultarListaProfesoresController
     private TableColumn tcNoPersonal;
 
     private ObservableList<Cuenta> usuarios;
-    private INotificacionRegreso notificacionRegreso;
-    private Cuenta usuarioLoggeado = new Cuenta();
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarTabla();
         cargarInformacionTabla();
     }  
-    public void inicializarPantalla(
-        Cuenta usuarioLoggeado,
-        INotificacionRegreso notificacionRegreso
-    ) {
-        this.usuarioLoggeado = usuarioLoggeado;
-        this.notificacionRegreso = notificacionRegreso;
-    }
     
     private void configurarTabla() {
         tcNoPersonal.setCellValueFactory(new PropertyValueFactory("numeroPersonal"));
@@ -75,7 +56,6 @@ public class FXMLConsultarListaProfesoresController
         tcCorreoInstitucional.setCellValueFactory(
                 new PropertyValueFactory("correoInstitucional")
         );
-        
     }
     
     private void cargarInformacionTabla() {
@@ -153,7 +133,7 @@ public class FXMLConsultarListaProfesoresController
         Cuenta usuarioSeleccionado = tvProfesores
             .getSelectionModel()
             .getSelectedItem();
-        int idAdministrador = usuarioLoggeado.getNumeroPersonal();
+        int idAdministrador = Cuenta.getInstanciaSingleton().getNumeroPersonal();
         
         if(usuarioSeleccionado == null) {
             mostrarMensajeUsuarioNoSeleccionado();
@@ -240,6 +220,9 @@ public class FXMLConsultarListaProfesoresController
 
     @FXML
     private void clicRegresarPantallaPrincipal(MouseEvent event) {
+         Stage escenarioPrincipal = (Stage) lblTituloTabla
+            .getScene()
+            .getWindow();
+         escenarioPrincipal.close();
     }
-    
 }

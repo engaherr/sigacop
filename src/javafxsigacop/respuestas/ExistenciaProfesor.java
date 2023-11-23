@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package javafxsigacop.respuestas;
 
 import javafxsigacop.modelo.pojo.Cuenta;
 
-/**
- *
- * @author dnava
- */
 public class ExistenciaProfesor {
     private Cuenta profesor;
     private int codigoRespuesta;

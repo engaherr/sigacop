@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package javafxsigacop.respuestas;
 
 import java.util.ArrayList;
 import javafxsigacop.modelo.pojo.Cuenta;
 
-/**
- *
- * @author dnava
- */
 public class ListaUsuariosRespuesta {
     private ArrayList<Cuenta> usuarios;
     private int codigoRespuesta;

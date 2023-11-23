@@ -1,30 +1,27 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxsigacop.controladores;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafxsigacop.JavaFXSIGACOP;
 import javafxsigacop.modelo.pojo.Cuenta;
-import javafxsigacop.utils.Utilidades;
+import javafxsigacop.utilidades.Utilidades;
 
-/**
- * FXML Controller class
- *
- * @author kikga
- */
-public class FXMLPrincipalController implements Initializable {
+public class FXMLPrincipalController implements Initializable{
 
     @FXML
     private ImageView imgMenu;
@@ -59,6 +56,28 @@ public class FXMLPrincipalController implements Initializable {
 
     @FXML
     private void clicGenerarConstancia(MouseEvent event) {
+        try {
+            FXMLLoader accesoControlador = new FXMLLoader(
+                javafxsigacop
+                    .JavaFXSIGACOP
+                    .class
+                    .getResource("vistas/FXMLGeneracionConstancias.fxml")
+            );
+            Parent vista = accesoControlador.load();
+        
+            Stage escenarioConstancias = new Stage();
+            escenarioConstancias.setScene(new Scene(vista));
+            escenarioConstancias.setTitle("Generar constancia");
+            escenarioConstancias.initModality(Modality.APPLICATION_MODAL);
+            escenarioConstancias.showAndWait();
+        } catch (IOException ex) {
+            Utilidades.mostrarDialogoSimple(
+                "Error de redirección", 
+                "Por el momento no se puede acceder a la pantalla, "
+                + "intente más tarde", 
+                Alert.AlertType.ERROR
+            );
+        }
     }
 
     @FXML
@@ -72,15 +91,55 @@ public class FXMLPrincipalController implements Initializable {
 
     @FXML
     private void clicIrConstanciasSolicitadas(MouseEvent event) {
+        try {
+            FXMLLoader accesoControlador = new FXMLLoader(
+                javafxsigacop
+                    .JavaFXSIGACOP
+                    .class
+                    .getResource("vistas/FXMLConsultarConstanciasSolicitadas.fxml")
+            );
+            Parent vista = accesoControlador.load();
+        
+            Stage escenarioConstanciasSolicitadas = new Stage();
+            escenarioConstanciasSolicitadas.setScene(new Scene(vista));
+            escenarioConstanciasSolicitadas.setTitle("Constancias solicitadas");
+            escenarioConstanciasSolicitadas.initModality(Modality.APPLICATION_MODAL);
+            escenarioConstanciasSolicitadas.showAndWait();
+        } catch (IOException ex) {
+            Utilidades.mostrarDialogoSimple(
+                "Error de redirección", 
+                "Por el momento no se puede acceder a la pantalla, "
+                + "intente más tarde", 
+                Alert.AlertType.ERROR
+            );
+            ex.printStackTrace();
+        }
     }
 
     @FXML
     private void clicIrAdministradorProfesores(MouseEvent event) {
-        Stage escenarioBase = (Stage) imgMenu.getScene().getWindow();
-        escenarioBase.setScene(Utilidades.inicializaEscena(
-                "vistas/FXMLConsultarListaProfesores.fxml"));
-        escenarioBase.setTitle("Profesores registrados");
-        escenarioBase.show();
+        try {
+            FXMLLoader accesoControlador = new FXMLLoader(
+                javafxsigacop
+                    .JavaFXSIGACOP
+                    .class
+                    .getResource("vistas/FXMLConsultarListaProfesores.fxml")
+            );
+            Parent vista = accesoControlador.load();
+            
+            Stage escenarioProfesores = new Stage();
+            escenarioProfesores.setScene(new Scene(vista));
+            escenarioProfesores.setTitle("Profesores registrados");
+            escenarioProfesores.initModality(Modality.APPLICATION_MODAL);
+            escenarioProfesores.showAndWait();
+        } catch (IOException ex) {
+            Utilidades.mostrarDialogoSimple(
+                "Error de redirección", 
+                "Por el momento no se puede acceder a la pantalla, "
+                + "intente más tarde", 
+                Alert.AlertType.ERROR
+            );
+        }
     }
     
     private void actualizaEstadoMenu(int posicion, boolean abierto, String icono){
