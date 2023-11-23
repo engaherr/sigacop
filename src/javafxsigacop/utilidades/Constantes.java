@@ -1,11 +1,3 @@
-/*
-* Título del programa: Clase con las Constantes utilizadas en todas las demás clases
-* Autor: Ramón Gómez Romero 
-* Fecha Creación: 09/05/2023
-* Descripción: Clase con Constantes con valores estáticos y no cambiables, que se identifican como
-* Códigos a lo largo de las clases del sistema. Hecho en clase de Principios de Construcción de 
-* Software con el profesor autor de la clase
-*/
 package javafxsigacop.utilidades;
 
 public class Constantes {
@@ -18,4 +10,8 @@ public class Constantes {
             "-fx-border-color: RED; -fx-border-width: 1; -fx-border-radius: 2;";
     public static final String CAMPO_ESTILOS_BASE = "-fx-border-width: 0;";
     
+    public static final String CONSTANCIA_EE = "Constancia Impartición EE";
+    public static final String CONSTANCIA_PLADEA = "Constancia Contribución Pladea";
+    public static final String CONSTANCIA_PROYECTO = "Constancia Participación Proyecto";
+    public static final String CONSTANCIA_JURADO = "Constancia Participación Jurado";
 }

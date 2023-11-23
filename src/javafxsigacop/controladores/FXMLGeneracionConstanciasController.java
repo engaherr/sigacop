@@ -1,21 +1,8 @@
 package javafxsigacop.controladores;
 
-
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
@@ -39,7 +26,7 @@ import javafxsigacop.modelo.pojo.ProgramaEducativo;
 import javafxsigacop.utilidades.RecursosEstaticos;
 import javafxsigacop.utilidades.Constantes;
 import javafxsigacop.modelo.pojo.Cuenta;
-import javafxsigacop.utils.Utilidades;
+import javafxsigacop.utilidades.Utilidades;
 
 public class FXMLGeneracionConstanciasController implements Initializable {
     @FXML
@@ -66,9 +53,10 @@ public class FXMLGeneracionConstanciasController implements Initializable {
     private Label lbErrorPeriodoEscolar;
     @FXML
     private TextField tfHorasSemanaMes;
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        lbDocente.setText(Cuenta.getInstanciaSingleton().toString());
         mostrarFechaActual();
         mostrarNombreDirector();
         
@@ -179,7 +167,16 @@ public class FXMLGeneracionConstanciasController implements Initializable {
     private void generarConstancia() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog((Stage) lbDirector.getScene().getWindow());
-
+        
+        ConstanciaEE constanciaEE = new ConstanciaEE();
+        constanciaEE.setPeriodoEscolar(cbPeriodoEscolar.getValue().getNombre());
+        constanciaEE.setProgramaEducativo(cbProgramaEducativo.getValue().getNombre());
+        constanciaEE.setBloque(cbExperienciaEducativa.getValue().getBloque());
+        constanciaEE.setExperienciaEducativa(cbExperienciaEducativa.getValue().getNombre());
+        constanciaEE.setSeccion(cbExperienciaEducativa.getValue().getSeccion());
+        constanciaEE.setCreditosExperiencia(cbExperienciaEducativa.getValue().getCreditos());
+        constanciaEE.setHorasSemanaMes(cbExperienciaEducativa.getValue().getHorasSemanaMes());
+        
         if(selectedDirectory == null){
             Utilidades.mostrarDialogoSimple(
                 "Seleccione una carpeta", 
@@ -191,7 +188,10 @@ public class FXMLGeneracionConstanciasController implements Initializable {
             try {
                 boolean constanciaGuardada = guardarRegistroConstancia();
                 if(constanciaGuardada) {
-                    descargarDocumentoPDF(selectedDirectory.getAbsolutePath());
+                    Utilidades.descargarDocumentoPDF(
+                            selectedDirectory.getAbsolutePath(), 
+                            constanciaEE
+                    );
                     limpiarCampos();
                     mostrarMensajeGeneracionExitosa();
                 }
@@ -213,130 +213,10 @@ public class FXMLGeneracionConstanciasController implements Initializable {
         }
     }
     
-    private void descargarDocumentoPDF(String nombreCarpetaAGuardar) throws IOException, DocumentException {
-        String nombreProfesor = Cuenta.getInstanciaSingleton().toString();
-        String nombrePeriodo = cbPeriodoEscolar.getValue().getNombre();
-        String nombrePrograma = cbProgramaEducativo.getValue().getNombre();
-        String nombreExperiencia = cbExperienciaEducativa.getValue().getNombre();        
-        String bloqueExperiencia = cbExperienciaEducativa.getValue().getBloque();
-        String seccionExperiencia = cbExperienciaEducativa.getValue().getSeccion();
-        String creditosExperiencia = cbExperienciaEducativa.getValue().getCreditos();        
-        String horasSemanaMes = cbExperienciaEducativa.getValue().getHorasSemanaMes();
-        
-        Document document = new Document();
-        document.setMargins(100f, 100f, 70f, 70f);
-
-        String nombreAutogeneradoPDF = "constanciaEE-" + Utilidades.obtenerFechaHoraActual() + ".pdf";
-        OutputStream outputStream = 
-            new FileOutputStream(new File(nombreCarpetaAGuardar, nombreAutogeneradoPDF));
-
-        PdfWriter.getInstance(document, outputStream);
-        document.open();
-
-        Paragraph parrafoAQuienCorresponda = new Paragraph(
-            "A quien corresponda",
-            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-        );
-        parrafoAQuienCorresponda.setSpacingAfter(20f);
-        document.add(parrafoAQuienCorresponda);
-
-        document.add(new Paragraph(
-            "​​El que suscribe, Director de la Facultad de Estadística "
-                + "e Informática, de la Universidad Veracruzana ",
-            FontFactory.getFont(FontFactory.TIMES, 12)
-        ));
-
-        Paragraph parrafoHaceConstar = new Paragraph(
-            "HACE CONSTAR",
-            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-        );
-        parrafoHaceConstar.setAlignment(Element.ALIGN_CENTER);
-        parrafoHaceConstar.setSpacingBefore(10f);            
-        parrafoHaceConstar.setSpacingAfter(10f);
-        document.add(parrafoHaceConstar);
-
-        Paragraph parrafoCurso = new Paragraph(
-            "​que el Mtro. ", 
-            FontFactory.getFont(FontFactory.TIMES, 12)
-        );
-        Chunk nombreProfesorBold = new Chunk(nombreProfesor, FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD));
-        parrafoCurso.add(nombreProfesorBold);
-        parrafoCurso.add(", impartió la siguiente experiencia educativa en el periodo " + nombrePeriodo);
-        parrafoCurso.setSpacingAfter(15f);
-        document.add(parrafoCurso);
-
-        PdfPTable tablaEE = new PdfPTable(4);
-        tablaEE.setWidthPercentage(100);
-        tablaEE.addCell(new Paragraph(
-            "Programa educativo",
-            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-        ));
-        tablaEE.addCell(new Paragraph(
-            "Experiencia educativa",
-            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-        ));
-        tablaEE.addCell(new Paragraph(
-            "​Bloque/Sección/Créditos",
-            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-        ));
-        tablaEE.addCell(new Paragraph(
-            "H/S/M",
-            FontFactory.getFont(FontFactory.TIMES, 12, Font.BOLD)
-        ));
-
-        tablaEE.addCell(new Paragraph(nombrePrograma, FontFactory.getFont(FontFactory.TIMES, 12)));
-        tablaEE.addCell(new Paragraph(nombreExperiencia, FontFactory.getFont(FontFactory.TIMES, 12)));
-        tablaEE.addCell(new Paragraph(bloqueExperiencia + "/" + seccionExperiencia + "/" + creditosExperiencia, FontFactory.getFont(FontFactory.TIMES, 12)));
-        tablaEE.addCell(new Paragraph(horasSemanaMes, FontFactory.getFont(FontFactory.TIMES, 12)));
-        document.add(tablaEE);
-
-        Paragraph parrafoFinal = new Paragraph(
-            "A petición de la interesada y para los fines legales que a la "
-                + "misma convenga, se extiende la presente en la ciudad de "
-                + "Xalapa-Enríquez, Veracruz a fecha de " 
-                + Utilidades.obtenerFechaActual() + ".", 
-            FontFactory.getFont(FontFactory.TIMES, 12)
-        );
-        parrafoFinal.setSpacingBefore(30f);            
-        parrafoFinal.setSpacingAfter(30f);
-        document.add(parrafoFinal);
-
-        Paragraph parrafoAtentamente = new Paragraph(
-            "A t e n t a m e n t e", 
-            FontFactory.getFont(FontFactory.TIMES, 12)
-        );
-        parrafoAtentamente.setAlignment(Element.ALIGN_CENTER);
-        document.add(parrafoAtentamente);
-        Paragraph parrafoLIS = new Paragraph(
-            "​\"Lis de Veracruz: Arte, Ciencia, Luz\"", 
-            FontFactory.getFont(FontFactory.TIMES, 12)
-        );
-        parrafoLIS.setAlignment(Element.ALIGN_CENTER);
-        parrafoLIS.setSpacingAfter(40f);
-        document.add(parrafoLIS);
-
-        Paragraph parrafoNombreDirector = new Paragraph(
-            RecursosEstaticos.obtenerNombreDirector(), 
-            FontFactory.getFont(FontFactory.TIMES, 12)
-        );
-        parrafoNombreDirector.setAlignment(Element.ALIGN_CENTER);
-        document.add(parrafoNombreDirector);
-        Paragraph parrafoDirector = new Paragraph(
-            "Director", 
-            FontFactory.getFont(FontFactory.TIMES, 12)
-        );
-        parrafoDirector.setAlignment(Element.ALIGN_CENTER);
-        document.add(parrafoDirector);
-
-        document.close();
-        outputStream.close();
-    }
-    
     private boolean guardarRegistroConstancia() {
         boolean constanciaguardadaEnBD = false;
         
-        //TO-DO: Recuperar informaciónd del singleton
-        int numeroPersonal = 1;
+        int numeroPersonal = Cuenta.getInstanciaSingleton().getNumeroPersonal();
         String nombrePeriodo = cbPeriodoEscolar.getValue().getNombre();
         String nombrePrograma = cbProgramaEducativo.getValue().getNombre();
         String nombreExperiencia = cbExperienciaEducativa.getValue().getNombre();        
@@ -421,5 +301,9 @@ public class FXMLGeneracionConstanciasController implements Initializable {
 
     @FXML
     private void cancelarGeneracionClic(ActionEvent event) {
+        Stage escenarioPrincipal = (Stage) lbDocente
+            .getScene()
+            .getWindow();
+         escenarioPrincipal.close();
     }
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxsigacop.controladores;
 
 import java.io.IOException;
@@ -22,16 +18,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafxsigacop.JavaFXSIGACOP;
-import javafxsigacop.interfaces.INotificacionRegreso;
 import javafxsigacop.modelo.pojo.Cuenta;
-import javafxsigacop.utils.Utilidades;
+import javafxsigacop.utilidades.Utilidades;
 
-/**
- * FXML Controller class
- *
- * @author kikga
- */
-public class FXMLPrincipalController implements Initializable, INotificacionRegreso {
+public class FXMLPrincipalController implements Initializable{
 
     @FXML
     private ImageView imgMenu;
@@ -74,10 +64,6 @@ public class FXMLPrincipalController implements Initializable, INotificacionRegr
                     .getResource("vistas/FXMLGeneracionConstancias.fxml")
             );
             Parent vista = accesoControlador.load();
-            
-            /*FXMLConsultarListaProfesoresController controladorCuerpos = 
-                accesoControlador.getController();
-            controladorCuerpos.inicializarPantalla(this);*/
         
             Stage escenarioConstancias = new Stage();
             escenarioConstancias.setScene(new Scene(vista));
@@ -105,15 +91,33 @@ public class FXMLPrincipalController implements Initializable, INotificacionRegr
 
     @FXML
     private void clicIrConstanciasSolicitadas(MouseEvent event) {
+        try {
+            FXMLLoader accesoControlador = new FXMLLoader(
+                javafxsigacop
+                    .JavaFXSIGACOP
+                    .class
+                    .getResource("vistas/FXMLConsultarConstanciasSolicitadas.fxml")
+            );
+            Parent vista = accesoControlador.load();
+        
+            Stage escenarioConstanciasSolicitadas = new Stage();
+            escenarioConstanciasSolicitadas.setScene(new Scene(vista));
+            escenarioConstanciasSolicitadas.setTitle("Constancias solicitadas");
+            escenarioConstanciasSolicitadas.initModality(Modality.APPLICATION_MODAL);
+            escenarioConstanciasSolicitadas.showAndWait();
+        } catch (IOException ex) {
+            Utilidades.mostrarDialogoSimple(
+                "Error de redirección", 
+                "Por el momento no se puede acceder a la pantalla, "
+                + "intente más tarde", 
+                Alert.AlertType.ERROR
+            );
+            ex.printStackTrace();
+        }
     }
 
     @FXML
     private void clicIrAdministradorProfesores(MouseEvent event) {
-        /*Stage escenarioBase = (Stage) imgMenu.getScene().getWindow();
-        escenarioBase.setScene(Utilidades.inicializaEscena(
-                "vistas/FXMLConsultarListaProfesores.fxml"));
-        escenarioBase.setTitle("Profesores registrados");
-        escenarioBase.showAndWait();*/
         try {
             FXMLLoader accesoControlador = new FXMLLoader(
                 javafxsigacop
@@ -123,10 +127,6 @@ public class FXMLPrincipalController implements Initializable, INotificacionRegr
             );
             Parent vista = accesoControlador.load();
             
-            /*FXMLConsultarListaProfesoresController controladorCuerpos = 
-                accesoControlador.getController();
-            controladorCuerpos.inicializarPantalla(this);*/
-        
             Stage escenarioProfesores = new Stage();
             escenarioProfesores.setScene(new Scene(vista));
             escenarioProfesores.setTitle("Profesores registrados");
@@ -155,15 +155,5 @@ public class FXMLPrincipalController implements Initializable, INotificacionRegr
         translate.setByX(posicion);
         translate.setAutoReverse(true);
         translate.play();
-    }
-
-    @Override
-    public void regresarAPantalla() {
-        menuAbierto = false;
-        
-        if (Cuenta.getInstanciaSingleton().isEsAdministrativo()) {
-            paneAdminProfesores.setVisible(true);
-            paneGenerarConstancia.setVisible(false);
-        }
     }
 }

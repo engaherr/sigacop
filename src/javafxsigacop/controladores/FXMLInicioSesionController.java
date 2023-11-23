@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import javafxsigacop.modelo.dao.SesionDAO;
 import javafxsigacop.modelo.pojo.Cuenta;
 import javafxsigacop.utilidades.Constantes;
-import javafxsigacop.utils.Utilidades;
+import javafxsigacop.utilidades.Utilidades;
 
 public class FXMLInicioSesionController implements Initializable {
     

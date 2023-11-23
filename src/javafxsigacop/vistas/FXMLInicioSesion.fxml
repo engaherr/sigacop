@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -10,7 +15,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="470.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxsigacop.controladores.FXMLInicioSesionController">
+<AnchorPane id="AnchorPane" prefHeight="470.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxsigacop.controladores.FXMLInicioSesionController">
    <children>
       <Pane layoutY="-1.0" prefHeight="60.0" prefWidth="707.0" style="-fx-background-color: #045bab;">
          <children>
@@ -36,7 +41,7 @@
                      </font>
                   </Label>
                   <TextField fx:id="tfNumeroPersonal" layoutX="17.0" layoutY="115.0" prefHeight="25.0" prefWidth="224.0" promptText="p.ej. 11111111" />
-                  <Button layoutX="71.0" layoutY="257.0" mnemonicParsing="false" onAction="#clicIniciarSesion" style="-fx-background-color: #045bab; -fx-background-radius: 5;" text="Iniciar Sesión" textFill="WHITE">
+                  <Button layoutX="71.0" layoutY="257.0" mnemonicParsing="false" onAction="#clicIniciarSesion" style="-fx-background-color: #045bab; -fx-background-radius: 5; -fx-cursor: hand;" text="Iniciar Sesión" textFill="WHITE">
                      <font>
                         <Font name="Microsoft JhengHei Bold" size="14.0" />
                      </font>

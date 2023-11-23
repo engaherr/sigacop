@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxsigacop.controladores;
 
 import java.net.URL;
@@ -21,13 +17,8 @@ import javafxsigacop.modelo.pojo.Cuenta;
 import javafxsigacop.respuestas.ExistenciaProfesor;
 import javafxsigacop.utilidades.Validaciones;
 import javafxsigacop.utilidades.Constantes;
-import javafxsigacop.utils.Utilidades;
+import javafxsigacop.utilidades.Utilidades;
 
-/**
- * FXML Controller class
- *
- * @author dnava
- */
 public class FXMLCrudProfesoresController implements Initializable {
 
     @FXML
