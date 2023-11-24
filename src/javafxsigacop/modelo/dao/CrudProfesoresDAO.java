@@ -177,7 +177,7 @@ public class CrudProfesoresDAO {
                         registroCuenta
                 );
                 sentenciaCuenta.setString(1, profesor.getContrasenha());
-                sentenciaCuenta.setInt(2, 1);
+                sentenciaCuenta.setInt(2, 0);
                 sentenciaCuenta.setInt(3, profesor.getNumeroPersonal());
 
                 int filasAfectadasCuenta = sentenciaCuenta.executeUpdate();

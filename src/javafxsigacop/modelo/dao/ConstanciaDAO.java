@@ -153,7 +153,7 @@ public class ConstanciaDAO {
         if(conexionDB != null){
             try {
                 String consulta = "SELECT c.id_constancia, c.fecha_expedicion, "
-                        + "CONCAT(u.nombre, u.apellido_paterno, u.apellido_materno) "
+                        + "CONCAT(u.nombre, ' ', u.apellido_paterno, ' ', u.apellido_materno) "
                         + "AS nombre, ciee.experiencia_educativa, "
                         + "ccp.eje_estrategico, cpj.rol, cpp.proyecto "
                         + "FROM constancias c "
