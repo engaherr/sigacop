@@ -1,7 +1,10 @@
 package javafxsigacop.controladores;
 
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,13 +43,13 @@ public class FXMLCrudProfesoresController implements Initializable {
     @FXML
     private Label lblTituloPantallaCrud;
     @FXML
-    private CheckBox cbAdministrador;
-    @FXML
     private TextField tfContrasenhia;
     
     private boolean esEdicion;
     private INotificacionOperacion interfazNotificacion;
     private int idProfesorEdicion;
+    @FXML
+    private Label lbContrasenha;
     
 
     /**
@@ -66,16 +69,24 @@ public class FXMLCrudProfesoresController implements Initializable {
     private void clicBtnRegistrar(ActionEvent event) {
         limpiarCampos();
         boolean camposValidos = validarCampos();
-        if(!camposValidos) {
+        if (!camposValidos) {
             Utilidades.mostrarDialogoSimple(
-                "Campos inválidos", 
-                "Por favor corrija los campos marcados para poder continuar", 
-                Alert.AlertType.WARNING
+                    "Campos inválidos",
+                    "Por favor corrija los campos marcados para poder continuar",
+                    Alert.AlertType.WARNING
             );
             return;
         }
-        guardarInformacionProfesor();
-        cerrarVentana();
+        try {
+            guardarInformacionProfesor();
+            cerrarVentana();
+        } catch (NoSuchAlgorithmException ex) {
+            Utilidades.mostrarDialogoSimple("Error",
+                    "Ha ocurrido un error al obtener la contraseña ingresada. "
+                            + "Por favor, contacte al administrador del sistema",
+                    Alert.AlertType.ERROR
+            );
+        }
     }
     
     public void incializarFormulario(
@@ -96,7 +107,7 @@ public class FXMLCrudProfesoresController implements Initializable {
             btnRegistrar.setText("Registrar");
         }
     } 
-    private void guardarInformacionProfesor() {
+    private void guardarInformacionProfesor() throws NoSuchAlgorithmException {
         Cuenta profesor = new Cuenta();
         profesor.setNumeroPersonal(Integer.parseInt(tfNumeroPersonal.getText()));
         profesor.setNombre(tfNombre.getText());
@@ -104,13 +115,17 @@ public class FXMLCrudProfesoresController implements Initializable {
         profesor.setApellidoMaterno(tfApellidoMaterno.getText());
         profesor.setTelefono(tfTelefono.getText());
         profesor.setCorreoInstitucional(tfCorreoInstitucional.getText());
-        profesor.setContrasenha(tfContrasenhia.getText());
         
         int codigoRespuesta;
-        if(esEdicion) {
+        if(esEdicion && tfContrasenhia.getText().isEmpty()) {
             profesor.setNumeroPersonal(idProfesorEdicion);
-            codigoRespuesta = CrudProfesoresDAO.actualizarProfesor(profesor);
-        } else {
+            codigoRespuesta = CrudProfesoresDAO.actualizarProfesorSinContraseña(profesor);
+        } else if(esEdicion && !tfContrasenhia.getText().isEmpty()){
+            profesor.setNumeroPersonal(idProfesorEdicion);
+            profesor.setContrasenha(Utilidades.cifrarContrasenha(tfContrasenhia.getText()));
+            codigoRespuesta = CrudProfesoresDAO.actualizarProfesorConContraseña(profesor);
+        }else{
+            profesor.setContrasenha(Utilidades.cifrarContrasenha(tfContrasenhia.getText()));
             codigoRespuesta = CrudProfesoresDAO.registrarProfesor(profesor);
         }
         
@@ -175,7 +190,7 @@ public class FXMLCrudProfesoresController implements Initializable {
             camposValidos = false;
             tfApellidoMaterno.setStyle(Constantes.CAMPO_ESTILOS_ERROR);
         }
-        if(contrasenhia.isEmpty()){
+        if(contrasenhia.isEmpty() && !esEdicion){
             camposValidos = false;
             tfContrasenhia.setStyle(Constantes.CAMPO_ESTILOS_ERROR);
         }
@@ -240,6 +255,8 @@ public class FXMLCrudProfesoresController implements Initializable {
         tfNumeroPersonal.setText(String.valueOf(profesor.getNumeroPersonal()));
         tfCorreoInstitucional.setText(profesor.getCorreoInstitucional());
         tfTelefono.setText(profesor.getTelefono());
-        tfContrasenhia.setText(profesor.getContrasenha());
+
+        tfNumeroPersonal.setEditable(false);
+        lbContrasenha.setText("Nueva contraseña");
     }
 }

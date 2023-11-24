@@ -14,7 +14,7 @@ import javafxsigacop.utilidades.Constantes;
 
 public class CrudProfesoresDAO {
     
-    public static int actualizarProfesor (Cuenta profesor){
+    public static int actualizarProfesorConContraseña (Cuenta profesor){
         int codigoRespuesta = Constantes.OPERACION_EXITOSA;
         Connection conexionDB = ConexionBD.abrirConexionBD();
             if (conexionDB != null) {
@@ -46,6 +46,45 @@ public class CrudProfesoresDAO {
                     conexionDB.close();
                 } catch (SQLException e) {
                     codigoRespuesta = Constantes.ERROR_CONSULTA;
+                    e.printStackTrace();
+                }
+            } else {
+                codigoRespuesta = Constantes.ERROR_CONEXION;
+            }
+        return codigoRespuesta;        
+    }
+    
+    public static int actualizarProfesorSinContraseña (Cuenta profesor){
+        int codigoRespuesta = Constantes.OPERACION_EXITOSA;
+        Connection conexionDB = ConexionBD.abrirConexionBD();
+            if (conexionDB != null) {
+                try {
+                    String actualizacionQuery = "UPDATE usuarios " 
+                            + "JOIN cuentas ON usuarios.numero_personal = cuentas.numero_personal " 
+                            + "SET nombre = ?, " 
+                            + "apellido_paterno = ?, " 
+                            + "apellido_materno = ?, " 
+                            + "correo_institucional = ?, " 
+                            + "telefono = ?, "
+                            + "WHERE usuarios.numero_personal = ?";
+
+                    PreparedStatement sentenciaPreparada = conexionDB.prepareStatement(actualizacionQuery);
+                    sentenciaPreparada.setString(1, profesor.getNombre());
+                    sentenciaPreparada.setString(2, profesor.getApellidoPaterno());
+                    sentenciaPreparada.setString(3, profesor.getApellidoMaterno());
+                    sentenciaPreparada.setString(4, profesor.getCorreoInstitucional());
+                    sentenciaPreparada.setString(5, profesor.getTelefono());
+                    sentenciaPreparada.setInt(6, profesor.getNumeroPersonal());
+
+                    int filasAfectadas = sentenciaPreparada.executeUpdate();
+                    if (filasAfectadas < 1 || filasAfectadas > 2) {
+                        codigoRespuesta = Constantes.ERROR_CONSULTA;
+                    }
+
+                    conexionDB.close();
+                } catch (SQLException e) {
+                    codigoRespuesta = Constantes.ERROR_CONSULTA;
+                    e.printStackTrace();
                 }
             } else {
                 codigoRespuesta = Constantes.ERROR_CONEXION;
@@ -87,6 +126,7 @@ public class CrudProfesoresDAO {
             conexionDB.close();
         } catch (SQLException e) {
             respuesta.setCodigoRespuesta(Constantes.ERROR_CONSULTA);
+            e.printStackTrace();
         }
     } else {
         respuesta.setCodigoRespuesta(Constantes.ERROR_CONEXION);
@@ -149,6 +189,7 @@ public class CrudProfesoresDAO {
             conexionDB.close();
         } catch (SQLException e) {
             codigoRespuesta = Constantes.ERROR_CONSULTA;
+            e.printStackTrace();
         }
     } else {
         codigoRespuesta = Constantes.ERROR_CONEXION;
@@ -156,16 +197,19 @@ public class CrudProfesoresDAO {
     return codigoRespuesta;
 }
  
-    public static ListaUsuariosRespuesta recuperarListaUsuarios() {
+    public static ListaUsuariosRespuesta recuperarListaProfesores() {
         ListaUsuariosRespuesta respuesta = new ListaUsuariosRespuesta();
         respuesta.setCodigoRespuesta(Constantes.OPERACION_EXITOSA);
         
         Connection conexionDB = ConexionBD.abrirConexionBD();
         if(conexionDB != null) {
             try {
-                String consulta = "SELECT numero_personal, " +
-                    " CONCAT(nombre, ' ', apellido_paterno, ' ', apellido_materno) AS nombre, " +
-                    " telefono, correo_institucional FROM sigacop.usuarios;";
+                String consulta = "SELECT u.numero_personal, " +
+                  " CONCAT(u.nombre, ' ', u.apellido_paterno, ' ', u.apellido_materno) AS nombre, " +
+                  " u.telefono, u.correo_institucional " +
+                  "FROM sigacop.usuarios u " +
+                  "JOIN sigacop.cuentas c ON u.numero_personal = c.numero_personal " +
+                  "WHERE c.es_administrativo = 0;";
                 
                 PreparedStatement sentenciaPreparada = 
                     conexionDB.prepareStatement(consulta);
@@ -215,6 +259,7 @@ public class CrudProfesoresDAO {
                 conexionDB.close();
             } catch (SQLException e) {
                 codigoRespuesta = Constantes.ERROR_CONSULTA;
+                e.printStackTrace();
             }
         } else {
             codigoRespuesta = Constantes.ERROR_CONEXION;

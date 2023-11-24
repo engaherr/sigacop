@@ -1,7 +1,10 @@
 package javafxsigacop.controladores;
 
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,8 +43,21 @@ public class FXMLInicioSesionController implements Initializable {
 
     private void validarCampos() {
         String numeroPersonal = tfNumeroPersonal.getText();
-        String contrasenha = tfContraseña.getText();
+        String contrasenha = "";
         boolean sonValidos = true;
+        
+        try {
+            contrasenha = Utilidades.cifrarContrasenha(tfContraseña.getText());
+        } catch (NoSuchAlgorithmException ex) {
+            sonValidos = !sonValidos;
+            
+            Utilidades.mostrarDialogoSimple("Error", 
+                    "Ha ocurrido un error al obtener la contraseña ingresada. "
+                            + "Por favor, contacte al administrador del sistema", 
+                    Alert.AlertType.ERROR
+            );
+        }
+        
         if(numeroPersonal.trim().isEmpty()){
             sonValidos = false;
             lbErrorNumeroPersonal.setText("El usuario es requerido");

@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -202,5 +204,20 @@ public class Utilidades {
 
         document.close();
         outputStream.close();
+    }
+    
+    public static String cifrarContrasenha(String contrasenha) throws NoSuchAlgorithmException{
+        final String FORMATO_BYTE_DOS_CARACTERES_HEXADECIMAL = "%02x";
+        MessageDigest procesadorMensaje = MessageDigest.getInstance("SHA-256");
+        byte[] cifradoBytes = procesadorMensaje.digest(contrasenha.getBytes());
+            
+        StringBuilder stringBuilder = new StringBuilder();
+        for(byte b : cifradoBytes){
+            stringBuilder.append(String.format(FORMATO_BYTE_DOS_CARACTERES_HEXADECIMAL,b));
+        }
+
+        String contrasenhaCifrada = stringBuilder.toString();
+        
+        return contrasenhaCifrada;
     }
 }

@@ -60,7 +60,7 @@ public class FXMLConsultarListaProfesoresController
     
     private void cargarInformacionTabla() {
         usuarios = FXCollections.observableArrayList();
-        ListaUsuariosRespuesta respuestaBD = CrudProfesoresDAO.recuperarListaUsuarios();
+        ListaUsuariosRespuesta respuestaBD = CrudProfesoresDAO.recuperarListaProfesores();
         
         switch(respuestaBD.getCodigoRespuesta()) {
             case Constantes.ERROR_CONEXION:
@@ -144,7 +144,7 @@ public class FXMLConsultarListaProfesoresController
             Utilidades.mostrarDialogoSimple(
                 "Acción no disponible", 
                 "No puede eliminar su cuenta mientras se encuentra loggeado, "
-                + "para realizar esta acción inicie sesión con otra cuentea", 
+                + "para realizar esta acción inicie sesión con otra cuenta", 
                 Alert.AlertType.WARNING
             );
             return;
@@ -153,7 +153,7 @@ public class FXMLConsultarListaProfesoresController
         boolean confirmacionEliminar = Utilidades.mostrarDialogoConfirmacion(
             "Confirmar eliminación", 
             "¿Estás seguro de eliminar el registro del usuario " + 
-            usuarioSeleccionado+ "?"
+            usuarioSeleccionado.getNombre()+ "?"
         );
 
         if(confirmacionEliminar) {
