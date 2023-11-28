@@ -3,8 +3,6 @@ package javafxsigacop.controladores;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -45,6 +43,7 @@ public class FXMLInicioSesionController implements Initializable {
         String numeroPersonal = tfNumeroPersonal.getText();
         String contrasenha = "";
         boolean sonValidos = true;
+        int noPersonal = 0;
         
         try {
             contrasenha = Utilidades.cifrarContrasenha(tfContraseña.getText());
@@ -58,25 +57,6 @@ public class FXMLInicioSesionController implements Initializable {
             );
         }
         
-        if(numeroPersonal.trim().isEmpty()){
-            sonValidos = false;
-            lbErrorNumeroPersonal.setText("El usuario es requerido");
-        }
-        if(contrasenha.trim().isEmpty()){
-            sonValidos = false;
-            lbErrorContraseña.setText("La contraseña es requerida");
-        }
-        if(sonValidos){
-            validarCredencialesUsuario(numeroPersonal,contrasenha);
-        }
-    }
-
-    private void validarCredencialesUsuario(String numeroPersonal, String contrasenha) {
-        Cuenta cuentaRespuesta = null;
-        boolean sonValidos = true;
-        int respuesta = Constantes.ERROR_CONSULTA;
-        int noPersonal = 0;
-        
         try{
             noPersonal = Integer.parseInt(numeroPersonal);
         }catch(NumberFormatException ex){
@@ -84,43 +64,58 @@ public class FXMLInicioSesionController implements Initializable {
             lbErrorNumeroPersonal.setText("El número de personal debe contener sólo números");
         }
         
+        if(numeroPersonal.trim().isEmpty()){
+            sonValidos = false;
+            lbErrorNumeroPersonal.setText("El usuario es requerido");
+        }
+        if(tfContraseña.getText().trim().isEmpty()){
+            sonValidos = false;
+            lbErrorContraseña.setText("La contraseña es requerida");
+        }
         if(sonValidos){
-            cuentaRespuesta = SesionDAO.verificarSesion(noPersonal, contrasenha);
-            respuesta = cuentaRespuesta.getCodigoRespuesta();
-            switch(respuesta){
-                case Constantes.ERROR_CONEXION:
-                    Utilidades.mostrarDialogoSimple("Error de Conexion", 
-                            "Por el momento no hay conexión, por favor intentélo más tarde",
-                            Alert.AlertType.ERROR);
-                    break;
-                case Constantes.ERROR_CONSULTA:
-                    Utilidades.mostrarDialogoSimple("Error en la solicitud", 
-                            "Por el momento no se puede procesar la solicitud de verificación", 
-                            Alert.AlertType.ERROR);
-                    break;
-                case Constantes.OPERACION_EXITOSA:
-                    if(cuentaRespuesta != null && cuentaRespuesta.getIdCuenta()> 0 && cuentaRespuesta.isEsAdministrativo()){
-                        Utilidades.mostrarDialogoSimple("Administrativo verificado",
-                                "Bienvenid@ " + " al sistema...", 
-                                Alert.AlertType.INFORMATION);
-                        Cuenta.setInstanciaSingleton(cuentaRespuesta);
-                        irPantallaPrincipal();
-                    }else if(cuentaRespuesta != null && cuentaRespuesta.getIdCuenta()> 0 && !cuentaRespuesta.isEsAdministrativo()){
-                        Utilidades.mostrarDialogoSimple("Profesor verificado",
-                                "Bienvenid@ " + " al sistema...", 
-                                Alert.AlertType.INFORMATION);
-                        Cuenta.setInstanciaSingleton(cuentaRespuesta);
-                        irPantallaPrincipal();
-                    }else{
-                        Utilidades.mostrarDialogoSimple("Credenciales incorrectas", 
-                                "El usuario y/o contraseñas son incorrectas, por favor verifique "
-                                        + "la información", Alert.AlertType.WARNING);
-                    }
-                    break;
-                default:
-                    Utilidades.mostrarDialogoSimple("Error de petición", 
-                                "El sistema no está disponible por el momento", Alert.AlertType.ERROR);
-            }
+            validarCredencialesUsuario(noPersonal,contrasenha);
+        }
+    }
+
+    private void validarCredencialesUsuario(int numeroPersonal, String contrasenha) {
+        Cuenta cuentaRespuesta;
+        int respuesta;
+        
+        cuentaRespuesta = SesionDAO.verificarSesion(numeroPersonal, contrasenha);
+        respuesta = cuentaRespuesta.getCodigoRespuesta();
+        switch(respuesta){
+            case Constantes.ERROR_CONEXION:
+                Utilidades.mostrarDialogoSimple("Error de Conexion", 
+                        "Por el momento no hay conexión, por favor intentélo más tarde",
+                        Alert.AlertType.ERROR);
+                break;
+            case Constantes.ERROR_CONSULTA:
+                Utilidades.mostrarDialogoSimple("Error en la solicitud", 
+                        "Por el momento no se puede procesar la solicitud de verificación", 
+                        Alert.AlertType.ERROR);
+                break;
+            case Constantes.OPERACION_EXITOSA:
+                if(cuentaRespuesta != null && cuentaRespuesta.getIdCuenta()> 0 && cuentaRespuesta.isEsAdministrativo()){
+                    Utilidades.mostrarDialogoSimple("Administrativo verificado",
+                            "Bienvenid@ " + " al sistema...", 
+                            Alert.AlertType.INFORMATION);
+                    Cuenta.setInstanciaSingleton(cuentaRespuesta);
+                    irPantallaPrincipal();
+                }else if(cuentaRespuesta != null && cuentaRespuesta.getIdCuenta()> 0 && !cuentaRespuesta.isEsAdministrativo()){
+                    Utilidades.mostrarDialogoSimple("Profesor verificado",
+                            "Bienvenid@ " + " al sistema...", 
+                            Alert.AlertType.INFORMATION);
+                    Cuenta.setInstanciaSingleton(cuentaRespuesta);
+                    irPantallaPrincipal();
+                }else{
+                    Utilidades.mostrarDialogoSimple("Credenciales incorrectas", 
+                            "El usuario y/o contraseñas son incorrectas, por favor verifique "
+                                    + "la información", Alert.AlertType.WARNING);
+                }
+                break;
+            default:
+                Utilidades.mostrarDialogoSimple("Error de petición", 
+                            "El sistema no está disponible por el momento", Alert.AlertType.ERROR);
         }
     }
 

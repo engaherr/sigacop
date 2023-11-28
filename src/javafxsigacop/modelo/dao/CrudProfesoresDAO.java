@@ -65,7 +65,7 @@ public class CrudProfesoresDAO {
                             + "apellido_paterno = ?, " 
                             + "apellido_materno = ?, " 
                             + "correo_institucional = ?, " 
-                            + "telefono = ?, "
+                            + "telefono = ? "
                             + "WHERE usuarios.numero_personal = ?";
 
                     PreparedStatement sentenciaPreparada = conexionDB.prepareStatement(actualizacionQuery);
