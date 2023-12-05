@@ -1,5 +1,7 @@
 package javafxsigacop.modelo.pojo;
 
+import java.util.Objects;
+
 public class ExperienciaEducativa {
     private String nombre;
     private String idProgramaEducativo;
@@ -82,4 +84,52 @@ public class ExperienciaEducativa {
     public String toString() {
         return nombre;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.nombre);
+        hash = 89 * hash + Objects.hashCode(this.idProgramaEducativo);
+        hash = 89 * hash + Objects.hashCode(this.bloque);
+        hash = 89 * hash + Objects.hashCode(this.seccion);
+        hash = 89 * hash + Objects.hashCode(this.idPeriodoEscolar);
+        hash = 89 * hash + Objects.hashCode(this.creditos);
+        hash = 89 * hash + Objects.hashCode(this.horasSemanaMes);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ExperienciaEducativa other = (ExperienciaEducativa) obj;
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.idProgramaEducativo, other.idProgramaEducativo)) {
+            return false;
+        }
+        if (!Objects.equals(this.bloque, other.bloque)) {
+            return false;
+        }
+        if (!Objects.equals(this.seccion, other.seccion)) {
+            return false;
+        }
+        if (!Objects.equals(this.idPeriodoEscolar, other.idPeriodoEscolar)) {
+            return false;
+        }
+        if (!Objects.equals(this.creditos, other.creditos)) {
+            return false;
+        }
+        return Objects.equals(this.horasSemanaMes, other.horasSemanaMes);
+    }
+    
+    
 }
